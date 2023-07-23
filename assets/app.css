@@ -1,0 +1,17 @@
+body {
+    background-color: rgb(46, 46, 46);
+    color: #ffffff;
+    font-family: "RobotoMono", Arial, sans-serif;
+}
+
+@font-face {
+    font-family: "TiltNeon";   /*Can be any text*/
+    src: local("AirbnbCerealLight"),
+        url("./fonts/TiltNeon-Regular.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "RobotMono";   /*Can be any text*/
+    src: local("RobotoMono-Regular"),
+        url("./fonts/RobotoMono-Regular.ttf") format("truetype");
+}

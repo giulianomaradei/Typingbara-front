@@ -1,46 +1,90 @@
 <template>
     <div class="text-container">
-        <span class="letter" v-for="(letter,index) in data.text" :key="index">
-            <span class="text-line" v-if="index===data.index"></span>
-            <Letter :color="data.colors[index]">{{letter}}</Letter>
+        <span v-for="(letter,index) in text" :key="index">
+            <span v-if="index === store.letterIndex"  class="text-line"></span>
+            <span :style="{color: store.colors[index]}">{{letter}}</span>
         </span>
     </div>
 
 </template>
 
-<script setup>
-import Letter from './Letter.vue';
+<script setup lang="ts">
 
+    import { computed, reactive, onMounted } from 'vue';
+    import { useTypingStore } from '../../store/typing/typingStore'
 
-    const data = reactive({
-        colors: [],
-        text: "Albion Online é um MMORPG SandBox em que você escreve sua própria história, Invés de seguir um caminho pré-determinado. Explore um vasto mundo aberto que consiste de 5 ecosistemas únicos.",
-        index: 1
-    });
+    const store = useTypingStore();
+    const { $axios } = useNuxtApp();
 
-    
+    const text = computed(()=>{
+        return store.text;
+    })
 
-    const formatedText = computed(() => {
-        return data.text.split(' ');
-    });
+    function keyPressed(event: KeyboardEvent){
+        const { key } = event;
+
+        const regex = /^[a-zA-Z'.,:?!]$/;
+
+        if(regex.test(key)){
+            if(key === store.text[store.letterIndex]){  
+                store.colors[store.letterIndex] = 'white'
+                store.words[store.wordIndex].lastWritedIndex = store.letterIndex +1;
+                store.letterIndex+=1;
+            }else{
+                store.colors[store.letterIndex] = 'red';
+                store.letterIndex+=1;
+            }
+        }else{
+            if(key === "Backspace" && store.letterIndex > 0){
+
+                if (store.words[store.wordIndex].start > store.letterIndex - 1 && store.words[store.wordIndex - 1].lastWritedIndex !== undefined){
+                    store.letterIndex = store.words[store.wordIndex - 1].lastWritedIndex ?? store.letterIndex;
+                    store.words[store.wordIndex].lastWritedIndex = undefined;
+                    store.wordIndex--;
+                }else{
+                    store.letterIndex-=1;
+                    store.colors[store.letterIndex] = "gray";
+                    console.log("aqyu")
+                }
+            }
+            if(key === ' ' && store.words[store.wordIndex].start !== store.letterIndex){
+                store.letterIndex = store.words[++store.wordIndex].start
+                
+            }
+        }
+    }
+
+    async function getRandomText(){
+        const text = (await $axios.get('http://metaphorpsum.com/paragraphs/1')).data
+        store.setText(text)
+        store.colors = (new Array(store.text.length).fill('gray'))
+    }
+
+    const colors = computed(()=>{
+        return store.colors;
+    })
 
     onMounted(()=>{
-        data.colors = (new Array(data.text.length).fill('white'))
+        window.addEventListener("keydown", keyPressed )
+        getRandomText();
     })
 
 </script>
 
 <style lang="css" scoped>
+    .text-container{
+        width: 80rem;
+        max-width: 90%;
+    }
 
-    .letter{
-
+    span{
+        font-size: 1.7rem;
     }
 
     .text-line{
         padding: 2px 1px;
         background-color: red;
-    }
-    .text-container{
-
+        font-size: 1.7rem;
+        font-weight: bold;
     }
 </style>

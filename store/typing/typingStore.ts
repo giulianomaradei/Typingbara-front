@@ -29,7 +29,8 @@ export const useTypingStore = defineStore('counter', {
               word,
               length,
               lastWritedIndex,
-              index: newWords.length
+              index: newWords.length,
+              lettersLeft: length
             });
             start = i+1;
             word = "";

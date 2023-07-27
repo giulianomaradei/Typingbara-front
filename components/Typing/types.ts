@@ -6,3 +6,8 @@ export interface Word {
     index: number
     lettersLeft: number
 }
+
+export interface Line {
+    line: string
+    cumulativeCharacters: number
+}

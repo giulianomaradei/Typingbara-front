@@ -1,9 +1,14 @@
 <template>
-    <div class="text-container">
-        <span v-for="(letter,index) in text" :key="index">
-            <span v-if="index === data.letterIndex"  class="text-line"></span>
-            <span :style="{color: data.colors[index]}">{{letter}}</span>
-        </span>
+    <div id="typing-container">
+        <div class="text-container">
+            <div v-for="(line, lineId) in data.lines" :key="lineId">
+                <span v-for="(letter, letterId) in line.line" :key="letterId">
+                    <span v-if="lineId === data.lineIndex && data.letterIndex === data.absoluteLetterIndexex[lineId][letterId]"  class="text-line"></span>
+                    <span :style="{color: data.colors[data.absoluteLetterIndexex[lineId][letterId]]}">{{letter}}</span>
+                </span>
+            </div>
+        </div>
+        <font-awesome-icon :icon="['fas', 'rotate']" />
     </div>
 
 </template>
@@ -12,21 +17,20 @@
 
     import { computed, reactive, onMounted } from 'vue';
     import { useTypingStore } from '../../store/typing/typingStore'
-    import { Word } from './types';
+    import { Word, Line } from './types';
 
     const store = useTypingStore();
     const { $axios } = useNuxtApp();
-
-    const text = computed(()=>{
-        return data.text;
-    })
 
     const data = reactive({
         text: "",
         letterIndex: 0,
         wordIndex:0,
+        lineIndex: 0,
         colors: [] as string[],
-        words: [] as Word[]
+        words: [] as Word[],
+        lines: [] as Line[],
+        absoluteLetterIndexex: [] as number[][] 
     })
 
     function keyPressed(event: KeyboardEvent){
@@ -36,7 +40,7 @@
 
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
-        // just for reducing boiler plate from the store
+        // just for reducing boiler plate from the data word
 
         if(regex.test(key)){
             if(key === data.text[data.letterIndex]){  
@@ -106,6 +110,7 @@
         }
         data.words = newWords;
         data.text = text
+        data.lines = divideTextInLines();
         data.colors = (new Array(data.text.length).fill('gray'))
     }
 
@@ -113,6 +118,70 @@
         const text = (await $axios.get('http://metaphorpsum.com/paragraphs/1')).data
         setData(text)
     }
+
+    function divideTextInLines() {
+        
+        let lines: Line[] = [];
+        let currentLine = "";
+        let cumulativeCharacters= 0;
+        const containerWidth = document.getElementById("typing-container")?.offsetWidth;
+
+        console.log(containerWidth)
+
+        for (let i = 0; i < data.words.length; i++) {
+            const word = data.words[i].word;
+            const lineWithWord = currentLine ? currentLine + " " + word : word;
+            const lineWidth = getTextWidth(lineWithWord);
+
+            if (containerWidth && lineWidth <= containerWidth) {
+                currentLine = lineWithWord;
+            } else {
+                lines.push({
+                    line: currentLine,
+                    cumulativeCharacters
+                });
+                let lineAbsoluteIndexes = [];
+                for (let j = 0; j < currentLine.length; j++) {
+                    lineAbsoluteIndexes.push(cumulativeCharacters + j);
+                }
+                data.absoluteLetterIndexex.push(lineAbsoluteIndexes);
+                cumulativeCharacters += currentLine.length;
+                currentLine = word;
+            }
+        }
+
+        if (currentLine) {
+            lines.push({
+                line: currentLine,
+                cumulativeCharacters
+            });
+            let lineAbsoluteIndexes = [];
+            for (let j = 0; j < currentLine.length; j++) {
+                lineAbsoluteIndexes.push(cumulativeCharacters + j);
+            }
+            data.absoluteLetterIndexex.push(lineAbsoluteIndexes);
+        }
+
+        return lines;
+    }
+
+    function getTextWidth(text: string) {
+        const container = document.getElementById("typing-container");
+        const span = document.createElement("span");
+        span.style.visibility = "hidden";
+        span.style.whiteSpace = "nowrap";
+        span.innerText = text;
+        container?.appendChild(span);
+        const width = span.offsetWidth;
+        container?.removeChild(span);
+        return width;
+    }
+
+    function absoluteLetterIndex( lineIndex: number, letterIndex: number){
+        return data.lines[lineIndex].cumulativeCharacters + letterIndex;
+    }
+
+
 
     const colors = computed(()=>{
         return data.colors;
@@ -127,8 +196,7 @@
 
 <style lang="css" scoped>
     .text-container{
-        width: 80rem;
-        max-width: 90%;
+
     }
 
     span{
@@ -140,5 +208,15 @@
         background-color: red;
         font-size: 1.7rem;
         font-weight: bold;
+    }
+
+    #typing-container{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        width: 80rem;
+        max-width: 90%;
     }
 </style>

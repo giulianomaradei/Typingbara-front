@@ -1,10 +1,10 @@
 <template>
-    <div id="typing-container">
-        <div class="text-container">
-            <div v-for="(line, lineId) in data.lines" :key="lineId">
+    <div class="typing-container">
+        <div id="text-container">
+            <div v-for="(line, lineId) in displayedLines" :key="lineId">
                 <span v-for="(letter, letterId) in line.line" :key="letterId">
-                    <span v-if="lineId === data.lineIndex && data.letterIndex === data.absoluteLetterIndexex[lineId][letterId]"  class="text-line"></span>
-                    <span :style="{color: data.colors[data.absoluteLetterIndexex[lineId][letterId]]}">{{letter}}</span>
+                    <span v-if="data.letterIndex === data.absoluteLetterIndexex[lineId+data.lineIndex][letterId]"  class="text-line"></span>
+                    <span :style="{color: data.colors[data.absoluteLetterIndexex[lineId+data.lineIndex][letterId]]}">{{letter}}</span>
                 </span>
             </div>
         </div>
@@ -36,16 +36,19 @@
     function keyPressed(event: KeyboardEvent){
         const { key } = event;
 
-        const regex = /^[a-zA-Z'.,:?!]$/;
+        const regex = /^[a-zA-Z'.,:?!;()]$/;
 
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
         // just for reducing boiler plate from the data word
 
-        if(regex.test(key)){
-            if(key === data.text[data.letterIndex]){  
+        if(regex.test(key)){ // if its a normal text letter
+            if(key === data.text[data.letterIndex]){  // if its the right letter
                 data.colors[data.letterIndex] = 'white'
                 data.words[data.wordIndex].lettersLeft--;
+                if(data.letterIndex === data.absoluteLetterIndexex[data.lineIndex+1][data.absoluteLetterIndexex[data.lineIndex+1].length-2]){ // if the letter is the last from the second line (-2 because there is always a empty space in the end)
+                    data.lineIndex++;
+                }
             }else{
                 data.colors[data.letterIndex] = 'red';
             }
@@ -57,8 +60,6 @@
                 if(data.letterIndex <= 0 ){ //start of the text cannot go back
                     return;   
                 }
-
-                console.log(lastWord);
 
                 if(data.wordIndex-1 >=0 && data.letterIndex === currentWord.start && lastWord.lettersLeft === 0){ // If we are at the beginning of the word and are trying to do a backspace, which would make us go back to the last word, so we gotta check if it wasn't already complete.
                     return;
@@ -115,7 +116,7 @@
     }
 
     async function getRandomText(){
-        const text = (await $axios.get('http://metaphorpsum.com/paragraphs/1')).data
+        const text = ((await $axios.get('http://metaphorpsum.com/paragraphs/6')).data.replace(/\n/g, ' '));
         setData(text)
     }
 
@@ -124,8 +125,7 @@
         let lines: Line[] = [];
         let currentLine = "";
         let cumulativeCharacters= 0;
-        const containerWidth = document.getElementById("typing-container")?.offsetWidth;
-
+        const containerWidth = document.getElementById("text-container")?.offsetWidth;
         console.log(containerWidth)
 
         for (let i = 0; i < data.words.length; i++) {
@@ -136,10 +136,13 @@
             if (containerWidth && lineWidth <= containerWidth) {
                 currentLine = lineWithWord;
             } else {
+                console.log(currentLine, lineWidth);
+                currentLine+= " ";
                 lines.push({
                     line: currentLine,
                     cumulativeCharacters
                 });
+                
                 let lineAbsoluteIndexes = [];
                 for (let j = 0; j < currentLine.length; j++) {
                     lineAbsoluteIndexes.push(cumulativeCharacters + j);
@@ -151,6 +154,7 @@
         }
 
         if (currentLine) {
+            currentLine+= " ";
             lines.push({
                 line: currentLine,
                 cumulativeCharacters
@@ -166,25 +170,25 @@
     }
 
     function getTextWidth(text: string) {
-        const container = document.getElementById("typing-container");
+        const container = document.getElementById("text-container");
         const span = document.createElement("span");
         span.style.visibility = "hidden";
         span.style.whiteSpace = "nowrap";
         span.innerText = text;
+        span.style.fontSize = "1.7rem"
+        span.style.fontFamily = "RobotMono"
         container?.appendChild(span);
         const width = span.offsetWidth;
         container?.removeChild(span);
         return width;
     }
 
-    function absoluteLetterIndex( lineIndex: number, letterIndex: number){
-        return data.lines[lineIndex].cumulativeCharacters + letterIndex;
-    }
-
-
-
     const colors = computed(()=>{
         return data.colors;
+    })
+
+    const displayedLines = computed(()=>{
+        return data.lines.slice(data.lineIndex, data.lineIndex+3);
     })
 
     onMounted(()=>{
@@ -195,12 +199,14 @@
 </script>
 
 <style lang="css" scoped>
-    .text-container{
-
+    #text-container{
+        width: 80rem;
+        max-width: 90%;
     }
 
     span{
         font-size: 1.7rem;
+        font-family: RobotMono;
     }
 
     .text-line{
@@ -210,13 +216,11 @@
         font-weight: bold;
     }
 
-    #typing-container{
+    .typing-container{
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 3rem;
         justify-content: center;
         align-items: center;
-        width: 80rem;
-        max-width: 90%;
     }
 </style>

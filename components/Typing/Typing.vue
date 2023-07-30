@@ -175,13 +175,14 @@
         span.style.visibility = "hidden";
         span.style.whiteSpace = "nowrap";
         span.innerText = text;
+        span.style.fontFamily = "RobotMono";
         span.style.fontSize = "1.7rem"
-        span.style.fontFamily = "RobotMono"
         container?.appendChild(span);
+        console.log(span.offsetWidth)
         const width = span.offsetWidth;
         container?.removeChild(span);
         return width;
-    }
+    } 
 
     const colors = computed(()=>{
         return data.colors;
@@ -201,12 +202,12 @@
 <style lang="css" scoped>
     #text-container{
         width: 80rem;
+        font-family: "RobotMono";
         max-width: 90%;
     }
 
     span{
         font-size: 1.7rem;
-        font-family: RobotMono;
     }
 
     .text-line{

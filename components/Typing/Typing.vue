@@ -36,7 +36,7 @@
     function keyPressed(event: KeyboardEvent){
         const { key } = event;
 
-        const regex = /^[a-zA-Z'.,:?!;()]$/;
+        const regex = /^[a-zA-Z'.,:?!;()-]$/;
 
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
@@ -126,7 +126,7 @@
         let currentLine = "";
         let cumulativeCharacters= 0;
         const containerWidth = document.getElementById("text-container")?.offsetWidth;
-        console.log(containerWidth)
+
 
         for (let i = 0; i < data.words.length; i++) {
             const word = data.words[i].word;
@@ -170,19 +170,23 @@
     }
 
     function getTextWidth(text: string) {
-        const container = document.getElementById("text-container");
-        const span = document.createElement("span");
-        span.style.visibility = "hidden";
-        span.style.whiteSpace = "nowrap";
+        const span = document.createElement('span');
+        const spanStyles = {
+            fontSize: '1.7rem',
+            fontFamily: 'RobotMono',
+            whiteSpace: 'nowrap',
+            visibility: 'hidden',
+        };
+
+        Object.assign(span.style, spanStyles);
+
         span.innerText = text;
-        span.style.fontFamily = "RobotMono";
-        span.style.fontSize = "1.7rem"
-        container?.appendChild(span);
-        console.log(span.offsetWidth)
+        console.log(span)
+        document.body.appendChild(span);
         const width = span.offsetWidth;
-        container?.removeChild(span);
+        document.body.removeChild(span);
         return width;
-    } 
+    }
 
     const colors = computed(()=>{
         return data.colors;
@@ -202,14 +206,10 @@
 <style lang="css" scoped>
     #text-container{
         width: 80rem;
-        font-family: "RobotMono";
         max-width: 90%;
-    }
-
-    span{
         font-size: 1.7rem;
+        font-family: RobotMono;
     }
-
     .text-line{
         padding: 2px 1px;
         background-color: red;

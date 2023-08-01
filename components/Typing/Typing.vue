@@ -18,7 +18,6 @@
     import { computed, reactive, onMounted } from 'vue';
     import { useTypingStore } from '../../store/typing/typingStore'
     import { Word, Line } from './types';
-    import { getTextWidth } from '@tubular/util'
 
     const store = useTypingStore();
     const { $axios } = useNuxtApp();
@@ -132,9 +131,9 @@
         for (let i = 0; i < data.words.length; i++) {
             const word = data.words[i].word;
             const lineWithWord = currentLine ? currentLine + " " + word : word;
-            const lineWidth = getTextWidth(lineWithWord, "1.7rem RobotMono");
+            const lineWidth = getTextWidth( lineWithWord );
 
-            if (containerWidth && lineWidth <= containerWidth) {
+            if (containerWidth && lineWidth < containerWidth) {
                 currentLine = lineWithWord;
             } else {
                 console.log(currentLine, lineWidth);
@@ -170,22 +169,15 @@
         return lines;
     }
 
-    function getTextWidthBackup(text: string) {
+    function getTextWidth(text: string) {
+        const container = document.getElementById('text-container')
         const span = document.createElement('span');
-        const spanStyles = {
-            fontSize: '1.7rem',
-            fontFamily: 'RobotMono',
-            whiteSpace: 'nowrap',
-            visibility: 'hidden',
-        };
-
-        Object.assign(span.style, spanStyles);
-
         span.innerText = text;
-        console.log(span)
-        document.body.appendChild(span);
-        const width = span.offsetWidth;
-        document.body.removeChild(span);
+        span.style.whiteSpace = 'nowrap';
+        container?.appendChild(span);
+        const width = span.offsetWidth; 
+        console.log(span.offsetWidth, container?.offsetWidth)
+        container?.removeChild(span);
         return width;
     }
 
@@ -209,7 +201,7 @@
         width: 80rem;
         max-width: 90%;
         font-size: 1.7rem;
-        font-family: RobotMono;
+        font-family: 'RobotMono';
     }
     .text-line{
         padding: 2px 1px;

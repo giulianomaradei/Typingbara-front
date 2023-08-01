@@ -6,11 +6,11 @@ body {
 @font-face {
     font-family: "TiltNeon";   /*Can be any text*/
     src: local("AirbnbCerealLight"),
-        url("../public/fonts/TiltNeon-Regular.ttf") format("truetype");
+        url("./fonts/TiltNeon-Regular.ttf") format("truetype");
 }
 
 @font-face {
     font-family: "RobotMono";   /*Can be any text*/
     src: local("RobotoMono-Regular"),
-        url("../public/fonts/RobotoMono-Regular.ttf") format("truetype");
+        url("./fonts/RobotoMono-Regular.ttf") format("truetype");
 }

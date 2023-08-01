@@ -18,7 +18,7 @@
 
     import { computed, reactive, onMounted } from 'vue';
     import { useTypingStore } from '../../store/typing/typingStore'
-    import { Word } from './types';
+    import { Word, Result } from 'types/typing/index'
     import Timer from './Timer.vue'
 
     const store = useTypingStore();
@@ -35,7 +35,14 @@
         lines: [] as string[],
         absoluteLetterIndexex: [] as number[][],
 
-        started: false
+        started: false,
+        result: {
+            wordsPerMinute: 0,
+            accuracy: 0,
+            time: 0,
+            correctCharacters: 0,
+            wrongCharacters: 0,
+        } as Result,
     })
 
     function finished(){
@@ -59,11 +66,13 @@
             if(key === data.text[data.letterIndex]){  // if its the right letter
                 data.colors[data.letterIndex] = 'white'
                 data.words[data.wordIndex].lettersLeft--;
+                data.result.correctCharacters++;
                 if(data.letterIndex === data.absoluteLetterIndexex[data.lineIndex+1][data.absoluteLetterIndexex[data.lineIndex+1].length-2]){ // if the letter is the last from the second line (-2 because there is always a empty space in the end)
                     data.lineIndex++;
                 }
             }else{
                 data.colors[data.letterIndex] = 'red';
+                data.result.wrongCharacters++;
             }
             data.words[data.wordIndex].lastWritedIndex = data.letterIndex +1;
             data.letterIndex+=1;
@@ -87,6 +96,9 @@
                     if(data.colors[data.letterIndex] === "white"){ // if i'm deleting a already correct letter there will be one more letter left
                         data.words[data.wordIndex].lettersLeft++;
                         data.words[data.wordIndex].lastWritedIndex--;
+                        data.result.correctCharacters--;
+                    }else if(data.colors[data.letterIndex] === 'red'){
+                        data.result.wrongCharacters--;
                     }
                     data.colors[data.letterIndex] = "gray";
                 }

@@ -11,7 +11,7 @@
     })
 
     const data = reactive({
-        remaining: props.time || 3,
+        remaining: props.time || 30,
         interval:  null as NodeJS.Timeout | null
     })
 

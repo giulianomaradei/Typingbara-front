@@ -18,6 +18,7 @@
     import { computed, reactive, onMounted } from 'vue';
     import { useTypingStore } from '../../store/typing/typingStore'
     import { Word, Line } from './types';
+    import { getTextWidth } from '@tubular/util'
 
     const store = useTypingStore();
     const { $axios } = useNuxtApp();
@@ -131,7 +132,7 @@
         for (let i = 0; i < data.words.length; i++) {
             const word = data.words[i].word;
             const lineWithWord = currentLine ? currentLine + " " + word : word;
-            const lineWidth = getTextWidth(lineWithWord);
+            const lineWidth = getTextWidth(lineWithWord, "1.7rem RobotMono");
 
             if (containerWidth && lineWidth <= containerWidth) {
                 currentLine = lineWithWord;
@@ -169,7 +170,7 @@
         return lines;
     }
 
-    function getTextWidth(text: string) {
+    function getTextWidthBackup(text: string) {
         const span = document.createElement('span');
         const spanStyles = {
             fontSize: '1.7rem',

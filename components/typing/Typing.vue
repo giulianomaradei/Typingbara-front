@@ -1,9 +1,10 @@
 <template>
     <div class="typing-container">
+        <Timer v-if="data.started" :callback="finished"></Timer>
         <div id="text-container">
             <div v-for="(line, lineId) in displayedLines" :key="lineId">
-                <span v-for="(letter, letterId) in line.line" :key="letterId">
-                    <span v-if="data.letterIndex === data.absoluteLetterIndexex[lineId+data.lineIndex][letterId]"  class="text-line"></span>
+                <span v-for="(letter, letterId) in line" :key="letterId">
+                    <span v-if="data.letterIndex === data.absoluteLetterIndexex[lineId+data.lineIndex][letterId]"  class="text-line" ></span>
                     <span :style="{color: data.colors[data.absoluteLetterIndexex[lineId+data.lineIndex][letterId]]}">{{letter}}</span>
                 </span>
             </div>
@@ -17,10 +18,12 @@
 
     import { computed, reactive, onMounted } from 'vue';
     import { useTypingStore } from '../../store/typing/typingStore'
-    import { Word, Line } from './types';
+    import { Word } from './types';
+    import Timer from './Timer.vue'
 
     const store = useTypingStore();
-    const { $axios } = useNuxtApp();
+    const route = useRoute()
+    const { $axios, $router } = useNuxtApp();
 
     const data = reactive({
         text: "",
@@ -29,9 +32,15 @@
         lineIndex: 0,
         colors: [] as string[],
         words: [] as Word[],
-        lines: [] as Line[],
-        absoluteLetterIndexex: [] as number[][] 
+        lines: [] as string[],
+        absoluteLetterIndexex: [] as number[][],
+
+        started: false
     })
+
+    function finished(){
+        $router.push('/result')
+    }
 
     function keyPressed(event: KeyboardEvent){
         const { key } = event;
@@ -43,6 +52,10 @@
         // just for reducing boiler plate from the data word
 
         if(regex.test(key)){ // if its a normal text letter
+            if(!data.started){
+                data.started = true;
+            }
+
             if(key === data.text[data.letterIndex]){  // if its the right letter
                 data.colors[data.letterIndex] = 'white'
                 data.words[data.wordIndex].lettersLeft--;
@@ -85,9 +98,8 @@
         }
     }
 
-    function setData( text: string ){
+    async function setData( text: string ){
         let newWords: Word[] = [];
-        let length = 0;
         let word = "";
         let start=0,lastWritedIndex;
 
@@ -99,19 +111,17 @@
             newWords.push({
               start,
               word,
-              length,
               lastWritedIndex: start,
               index: newWords.length,
               lettersLeft: length
             });
             start = i+1;
             word = "";
-            length= 0
           }
         }
         data.words = newWords;
         data.text = text
-        data.lines = divideTextInLines();
+        data.lines = await divideTextInLines();
         data.colors = (new Array(data.text.length).fill('gray'))
     }
 
@@ -120,9 +130,9 @@
         setData(text)
     }
 
-    function divideTextInLines() {
+    async function divideTextInLines() {
         
-        let lines: Line[] = [];
+        let lines: string[] = [];
         let currentLine = "";
         let cumulativeCharacters= 0;
         const containerWidth = document.getElementById("text-container")?.offsetWidth;
@@ -131,17 +141,14 @@
         for (let i = 0; i < data.words.length; i++) {
             const word = data.words[i].word;
             const lineWithWord = currentLine ? currentLine + " " + word : word;
-            const lineWidth = getTextWidth( lineWithWord );
+            const lineWidth = await getTextWidth( lineWithWord );
 
             if (containerWidth && lineWidth < containerWidth) {
                 currentLine = lineWithWord;
             } else {
                 console.log(currentLine, lineWidth);
                 currentLine+= " ";
-                lines.push({
-                    line: currentLine,
-                    cumulativeCharacters
-                });
+                lines.push(currentLine);
                 
                 let lineAbsoluteIndexes = [];
                 for (let j = 0; j < currentLine.length; j++) {
@@ -155,10 +162,7 @@
 
         if (currentLine) {
             currentLine+= " ";
-            lines.push({
-                line: currentLine,
-                cumulativeCharacters
-            });
+            lines.push(currentLine);
             let lineAbsoluteIndexes = [];
             for (let j = 0; j < currentLine.length; j++) {
                 lineAbsoluteIndexes.push(cumulativeCharacters + j);
@@ -169,22 +173,20 @@
         return lines;
     }
 
-    function getTextWidth(text: string) {
-        const container = document.getElementById('text-container')
+    async function getTextWidth(text: string) {
+        const container = document.getElementById('text-container');
         const span = document.createElement('span');
         span.innerText = text;
         span.style.whiteSpace = 'nowrap';
         container?.appendChild(span);
-        const width = span.offsetWidth; 
-        console.log(span.offsetWidth, container?.offsetWidth)
+
+        await document.fonts.ready; // Wait for the font to be loaded
+
+        const width = span.offsetWidth;
         container?.removeChild(span);
         return width;
     }
-
-    const colors = computed(()=>{
-        return data.colors;
-    })
-
+ 
     const displayedLines = computed(()=>{
         return data.lines.slice(data.lineIndex, data.lineIndex+3);
     })
@@ -198,23 +200,25 @@
 
 <style lang="css" scoped>
     #text-container{
-        width: 80rem;
-        max-width: 90%;
+        width: 100%;
         font-size: 1.7rem;
         font-family: 'RobotMono';
     }
     .text-line{
         padding: 2px 1px;
-        background-color: red;
+        background-color: rgb(255, 0, 0);
         font-size: 1.7rem;
         font-weight: bold;
     }
 
     .typing-container{
+        width: 60rem;
+        max-width: 90%;
         display: flex;
         flex-direction: column;
-        gap: 3rem;
+        gap: 2rem;
         justify-content: center;
         align-items: center;
     }
+
 </style>

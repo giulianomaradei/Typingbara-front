@@ -39,13 +39,17 @@
         result: {
             wordsPerMinute: 0,
             accuracy: 0,
-            time: 0,
+            time: 30,
             correctCharacters: 0,
             wrongCharacters: 0,
         } as Result,
     })
 
     function finished(){
+        const result = data.result;
+        data.result.wordsPerMinute = (((result.wrongCharacters + result.correctCharacters)/5) - result.wrongCharacters)/(result.time/60);
+        data.result.accuracy = (100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters)
+        store.result = data.result;
         $router.push('/result')
     }
 
@@ -191,9 +195,7 @@
         span.innerText = text;
         span.style.whiteSpace = 'nowrap';
         container?.appendChild(span);
-
         await document.fonts.ready; // Wait for the font to be loaded
-
         const width = span.offsetWidth;
         container?.removeChild(span);
         return width;
@@ -225,6 +227,7 @@
 
     .typing-container{
         width: 60rem;
+        height: 100vh;
         max-width: 90%;
         display: flex;
         flex-direction: column;

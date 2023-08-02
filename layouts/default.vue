@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div>
         <div class="header">
             <div class="title">Capybara Type</div>
             <img class="header-logo" src="~/assets/images/capy_logo.png">
@@ -20,18 +20,13 @@
     height: 3rem;
     margin: 0 auto;
     padding: 2rem  0;
-    border-radius: 2rem;
-    position: fixed;
 
+    position: fixed;
     display: flex;
     justify-content:center;
     align-items: center;
 }
 
-.container{
-    width: 70vw;
-    display: flex;
-}
 
 .title{
     font-size: 4rem;

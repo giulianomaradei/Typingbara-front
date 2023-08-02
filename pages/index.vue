@@ -10,10 +10,10 @@
 
 <style lang="css" scoped>
     .text-frame{
-        height: 100vh;
         width: 100vw;
         display: flex;
-        justify-content: center;
+        flex-direction: column;
+        justify-content: space-between;
         align-items: center;
     }
 </style>

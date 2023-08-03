@@ -1,9 +1,8 @@
 <template>
-    <div>
-        <div> {{ result.wordsPerMinute }}</div>
-        <div> {{ result.accuracy }}</div>
-        <div> {{ `${result.correctCharacters} / ${result.wrongCharacters}`  }}</div>
-        <div> {{ result.wordsPerMinute }}</div>
+    <div class="result">
+        <div><span>WPM: </span>{{ result.wordsPerMinute }}</div>
+        <div><span>Accuaracy: </span>{{ result.accuracy }}%</div>
+        <div><span>C&W: </span>{{ `${result.correctCharacters}/${result.wrongCharacters}`  }}</div>
     </div>
 </template>
 
@@ -21,5 +20,12 @@
 </script>
 
 <style lang="scss" scoped>
+    .result{
+        font-size: 3rem;
+        color: rgb(255, 157, 0);
+    }
 
+    span{
+        font-size: 4rem;
+    }
 </style>

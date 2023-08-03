@@ -47,8 +47,8 @@
 
     function finished(){
         const result = data.result;
-        data.result.wordsPerMinute = (((result.wrongCharacters + result.correctCharacters)/5) - result.wrongCharacters)/(result.time/60);
-        data.result.accuracy = (100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters)
+        data.result.wordsPerMinute = Math.trunc(((result.wrongCharacters + result.correctCharacters)/5)/(result.time/60));
+        data.result.accuracy = Math.trunc((100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters))
         store.result = data.result;
         $router.push('/result')
     }
@@ -227,7 +227,6 @@
 
     .typing-container{
         width: 60rem;
-        height: 100vh;
         max-width: 90%;
         display: flex;
         flex-direction: column;

@@ -6,7 +6,9 @@
         </div>
     </div>
     
-    <slot />
+    <div class="container">
+        <slot />
+    </div>
 </template>
 
 <script setup>
@@ -40,5 +42,12 @@
     margin: 0 1rem;
     padding: 0.2rem;
     height: 4rem;
+}
+
+.container{
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 </style>

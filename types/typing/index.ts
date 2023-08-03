@@ -4,6 +4,7 @@ export interface Result{
     time: number,
     correctCharacters:number,
     wrongCharacters:number,
+    totalKeysPressed: number
 }
 
 export interface Word {

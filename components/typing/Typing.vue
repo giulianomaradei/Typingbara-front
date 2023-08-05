@@ -9,7 +9,7 @@
                 </span>
             </div>
         </div>
-        <font-awesome-icon :icon="['fas', 'rotate']" />
+        <font-awesome-icon class="newText" @click="getRandomText" :icon="['fas', 'rotate']" />
     </div>
 
 </template>
@@ -225,8 +225,12 @@
         font-weight: bold;
     }
 
+    .newText{
+        cursor: pointer;
+    }
+
     .typing-container{
-        width: 60rem;
+        width: 80rem;
         max-width: 90%;
         display: flex;
         flex-direction: column;

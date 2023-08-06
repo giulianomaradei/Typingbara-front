@@ -4,8 +4,8 @@
         <div id="text-container">
             <div v-for="(line, lineId) in displayedLines" :key="lineId">
                 <span v-for="(letter, letterId) in line" :key="letterId">
-                    <span v-if="data.letterIndex === data.absoluteLetterIndexex[lineId+data.lineIndex][letterId]"  class="text-line" ></span>
-                    <span :style="{color: data.colors[data.absoluteLetterIndexex[lineId+data.lineIndex][letterId]]}">{{letter}}</span>
+                    <span v-if="data.letterIndex === data.absoluteLetterIndexes[lineId+data.lineIndex][letterId]"  class="text-line" ></span>
+                    <span :style="{color: data.colors[data.absoluteLetterIndexes[lineId+data.lineIndex][letterId]]}">{{letter}}</span>
                 </span>
             </div>
         </div>
@@ -33,7 +33,7 @@
         colors: [] as string[],
         words: [] as Word[],
         lines: [] as string[],
-        absoluteLetterIndexex: [] as number[][],
+        absoluteLetterIndexes: [] as number[][],
 
         started: false,
         result: {
@@ -71,7 +71,7 @@
                 data.colors[data.letterIndex] = 'white'
                 data.words[data.wordIndex].lettersLeft--;
                 data.result.correctCharacters++;
-                if(data.letterIndex === data.absoluteLetterIndexex[data.lineIndex+1][data.absoluteLetterIndexex[data.lineIndex+1].length-2]){ // if the letter is the last from the second line (-2 because there is always a empty space in the end)
+                if(data.letterIndex === data.absoluteLetterIndexes[data.lineIndex+1][data.absoluteLetterIndexes[data.lineIndex+1].length-2]){ // if the letter is the last from the second line (-2 because there is always a empty space in the end)
                     data.lineIndex++;
                 }
             }else{
@@ -109,7 +109,7 @@
             }
             if(key === ' ' && currentWord.start !== data.letterIndex){
                 data.letterIndex = data.words[++data.wordIndex].start
-                
+                data.result.correctCharacters++;
             }
         }
     }
@@ -117,7 +117,13 @@
     async function setData( text: string ){
         let newWords: Word[] = [];
         let word = "";
-        let start=0,lastWritedIndex;
+        let start=0,lastWritedIndes;
+
+        data.letterIndex = 0,
+        data.wordIndex = 0,
+        data.lineIndex = 0,
+        data.absoluteLetterIndexes = [];
+        data.started = false;
 
         for (var i = 0; i < text.length; i++) {
           if(text[i] !== ' '){
@@ -141,10 +147,20 @@
         data.colors = (new Array(data.text.length).fill('gray'))
     }
 
-    async function getRandomText(){
-        const text = ((await $axios.get('http://metaphorpsum.com/paragraphs/6')).data.replace(/\n/g, ' '));
-        setData(text)
+    async function getRandomText() {
+        const text = (await $axios.get('http://metaphorpsum.com/paragraphs/6')).data;
+        const cleanedText = text
+            .replace(/\n/g, ' ')
+            .replace(/[^a-zA-Z ]/g, '')
+            .toLowerCase()
+            .split(' ')
+            .filter((word: string) => word.length <= 6)
+            .join(' ');
+
+        setData(cleanedText);
     }
+
+
 
     async function divideTextInLines() {
         
@@ -162,7 +178,6 @@
             if (containerWidth && lineWidth < containerWidth) {
                 currentLine = lineWithWord;
             } else {
-                console.log(currentLine, lineWidth);
                 currentLine+= " ";
                 lines.push(currentLine);
                 
@@ -170,7 +185,7 @@
                 for (let j = 0; j < currentLine.length; j++) {
                     lineAbsoluteIndexes.push(cumulativeCharacters + j);
                 }
-                data.absoluteLetterIndexex.push(lineAbsoluteIndexes);
+                data.absoluteLetterIndexes.push(lineAbsoluteIndexes);
                 cumulativeCharacters += currentLine.length;
                 currentLine = word;
             }
@@ -183,7 +198,7 @@
             for (let j = 0; j < currentLine.length; j++) {
                 lineAbsoluteIndexes.push(cumulativeCharacters + j);
             }
-            data.absoluteLetterIndexex.push(lineAbsoluteIndexes);
+            data.absoluteLetterIndexes.push(lineAbsoluteIndexes);
         }
 
         return lines;

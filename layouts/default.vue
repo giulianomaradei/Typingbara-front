@@ -1,8 +1,14 @@
 <template>
     <div>
         <div class="header">
-            <div class="title">Capybara Type</div>
-            <img class="header-logo" src="~/assets/images/capy_logo.png">
+            <div class="logo">
+                <div class="title">Capybara Type</div>
+                <img class="header-logo" src="~/assets/images/capy_logo.png">
+            </div>
+            <div class="options">
+                <font-awesome-icon :icon="['fas', 'user']" />
+                <font-awesome-icon :icon="['fas', 'gear']" />
+            </div>
         </div>
     </div>
     
@@ -19,14 +25,24 @@
 
 .header{
     width: 100vw;
-    height: 3rem;
+    height: 7rem;
     margin: 0 auto;
-    padding: 2rem  0;
+    padding: 2rem 12rem;
 
     position: fixed;
     display: flex;
-    justify-content:center;
+    justify-content:space-between;
     align-items: center;
+    box-sizing: border-box;
+}
+
+.logo{
+    display: flex;
+}
+
+.options{
+    display: flex;
+   gap: 2rem;
 }
 
 

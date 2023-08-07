@@ -227,7 +227,7 @@
 
 </script>
 
-<style lang="css" scoped>
+<style lang="scss" scoped>
     #text-container{
         width: 100%;
         font-size: 1.7rem;
@@ -242,6 +242,10 @@
 
     .newText{
         cursor: pointer;
+        
+        &:hover {
+            color: darken(#ffffff, 15%); /* Cor um pouco mais escura quando o cursor estiver em cima */
+        }
     }
 
     .typing-container{

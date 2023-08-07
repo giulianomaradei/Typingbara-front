@@ -32,7 +32,7 @@
     .timer-container{
         align-self: self-start;
         font-family: 'RobotMono';
-        font-size: 1.5rem;
+        font-size: clamp(1rem, 0.9074rem + 0.4938vw, 1.5rem);
         color: rgb(255, 157, 0);
     }
 </style>

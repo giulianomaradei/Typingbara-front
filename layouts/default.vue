@@ -27,7 +27,7 @@
     width: 100vw;
     height: 7rem;
     margin: 0 auto;
-    padding: 2rem 12rem;
+    padding: 2rem 10%;
 
     position: fixed;
     display: flex;
@@ -42,14 +42,16 @@
 
 .options{
     display: flex;
-   gap: 2rem;
+    gap: 2rem;
 }
 
-
 .title{
-    font-size: 4rem;
+    font-size: clamp(2rem, 1.6296rem + 1.9753vw, 4rem);
     color: rgb(255, 255, 255);
     font-family: "TiltNeon";
+    @media screen and (max-width: 768px) {
+        display: none;
+    }
 }
 
 .header-logo{

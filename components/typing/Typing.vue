@@ -60,7 +60,7 @@
     }
     
     function openMobileKeyboard() {
-        var inputField = document.getElementById("textContainer");
+        var inputField = document.getElementById("text-container");
         inputField?.focus(); // Isso define o foco no campo de entrada
     }
 

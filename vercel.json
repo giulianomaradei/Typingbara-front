@@ -1,0 +1,10 @@
+{
+    "rewrites": [
+      {
+        "source": "/api/:path*",
+        "destination": "http://metaphorpsum.com/:path*",
+        "method": "GET"
+      }
+    ]
+  }
+  

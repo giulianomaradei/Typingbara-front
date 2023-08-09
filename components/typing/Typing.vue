@@ -172,7 +172,7 @@
     }
 
     async function getRandomText() {
-        const text = (await $axios.get('https://random-word-api.vercel.app/api?words=200')).data;
+        const text = await ((await $axios.get('https://random-word-api.vercel.app/api?words=200')).data);
         const cleanedText = text
             .join(" ")
             .replace(/\n/g, ' ')

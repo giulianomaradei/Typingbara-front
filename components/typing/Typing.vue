@@ -3,7 +3,7 @@
 
         <Timer v-if="data.started" :callback="finished"></Timer>
         <div class="capslockWarning" v-if="data.capslock">Capslock</div>
-        <input ref="inputRef" type="text" style="position: absolute; opacity: 0; width: 1px; height: 1px;">
+        <input ref="inputRef" id="hidden-input" type="text" style="position: absolute; opacity: 0">
         <div @click="openMobileKeyboard" id="text-container">
             <div v-for="(line, lineId) in displayedLines" :key="lineId">
                 <span v-for="(letter, letterId) in line" :key="letterId">
@@ -34,7 +34,7 @@
     const { $axios, $router } = useNuxtApp();
 
     const inputRef = ref<HTMLInputElement | null>(null); 
-
+        console.log("AQUI")
     const data = reactive({
         text: "",
         letterIndex: 0,
@@ -65,6 +65,7 @@
     }
     
     function openMobileKeyboard() {
+        
         if (inputRef.value) {
             inputRef.value.focus();
         }
@@ -246,6 +247,7 @@
 
     onMounted(()=>{
         window.addEventListener("keydown", keyPressed )
+        inputRef.value = document.querySelector('#hidden-input');
         getRandomText();
     })
 

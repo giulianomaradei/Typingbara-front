@@ -3,7 +3,7 @@
         <div v-if="!data.text" class="c-loader"></div>
         <Timer v-if="data.started" :callback="finished"></Timer>
         <div class="capslockWarning" v-if="data.capslock">Capslock</div>
-        <div id="text-container">
+        <div @click="openMobileKeyboard" id="text-container">
             <div v-for="(line, lineId) in displayedLines" :key="lineId">
                 <span v-for="(letter, letterId) in line" :key="letterId">
                     <span v-if="data.letterIndex === data.absoluteLetterIndexes[lineId+data.lineIndex][letterId]"  class="text-line" ></span>
@@ -57,6 +57,11 @@
         data.result.accuracy = Math.trunc((100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters))
         store.result = data.result;
         $router.push('/result')
+    }
+    
+    function openMobileKeyboard() {
+        var inputField = document.getElementById("textContainer");
+        inputField?.focus(); // Isso define o foco no campo de entrada
     }
 
     function keyPressed(event: KeyboardEvent){
@@ -245,9 +250,9 @@
         width: 100%;
         font-size: 1.7rem;
         font-family: 'RobotMono';
-        display: flex;
-        flex-direction: column;
         @media screen and (max-width: 768px) {
+            display: flex;
+            flex-direction: column;
             align-items: center;
         }
     }

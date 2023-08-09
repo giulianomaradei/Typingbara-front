@@ -148,7 +148,7 @@
     }
 
     async function getRandomText() {
-        const text = (await $axios.get('https://metaphorpsum.com/paragraphs/6')).data;
+        const text = (await $axios.get('http://metaphorpsum.com/paragraphs/6')).data;
         const cleanedText = text
             .replace(/\n/g, ' ')
             .replace(/[^a-zA-Z ]/g, '')

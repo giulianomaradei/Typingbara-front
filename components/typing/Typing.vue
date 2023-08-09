@@ -1,8 +1,9 @@
 <template>
     <div class="typing-container">
-        <div v-if="!data.text" class="c-loader"></div>
+
         <Timer v-if="data.started" :callback="finished"></Timer>
         <div class="capslockWarning" v-if="data.capslock">Capslock</div>
+        <input ref="inputRef" type="text" style="position: absolute; opacity: 0; width: 1px; height: 1px;">
         <div @click="openMobileKeyboard" id="text-container">
             <div v-for="(line, lineId) in displayedLines" :key="lineId">
                 <span v-for="(letter, letterId) in line" :key="letterId">
@@ -11,7 +12,9 @@
                 </span>
             </div>
         </div>
-        <div v-if="data.text" class="button">
+
+        <div v-if="!data.text" class="c-loader"></div>
+        <div v-else class="button">
                 <div class="tooltip">New Text</div>
                 <font-awesome-icon class="iconButton"  @click="getRandomText" :icon="['fas', 'rotate']" />
         </div>
@@ -21,7 +24,7 @@
 
 <script setup lang="ts">
 
-    import { computed, reactive, onMounted } from 'vue';
+    import { computed, reactive, onMounted, ref } from 'vue';
     import { useTypingStore } from '../../store/typing/typingStore'
     import { Word, Result } from 'types/typing/index'
     import Timer from './Timer.vue'
@@ -29,6 +32,8 @@
     const store = useTypingStore();
     const route = useRoute()
     const { $axios, $router } = useNuxtApp();
+
+    const inputRef = ref<HTMLInputElement | null>(null); 
 
     const data = reactive({
         text: "",
@@ -60,8 +65,9 @@
     }
     
     function openMobileKeyboard() {
-        var inputField = document.getElementById("text-container");
-        inputField?.focus(); // Isso define o foco no campo de entrada
+        if (inputRef.value) {
+            inputRef.value.focus();
+        }
     }
 
     function keyPressed(event: KeyboardEvent){

@@ -148,8 +148,9 @@
     }
 
     async function getRandomText() {
-        const text = (await $axios.get('http://metaphorpsum.com/paragraphs/6')).data;
+        const text = (await $axios.get('https://random-word-api.vercel.app/api?words=200')).data;
         const cleanedText = text
+            .join(" ")
             .replace(/\n/g, ' ')
             .replace(/[^a-zA-Z ]/g, '')
             .toLowerCase()

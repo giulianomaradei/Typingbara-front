@@ -1,6 +1,8 @@
 <template>
     <div class="typing-container">
+        <div v-if="!data.text" class="c-loader"></div>
         <Timer v-if="data.started" :callback="finished"></Timer>
+        <div class="capslockWarning" v-if="data.capslock">Capslock</div>
         <div id="text-container">
             <div v-for="(line, lineId) in displayedLines" :key="lineId">
                 <span v-for="(letter, letterId) in line" :key="letterId">
@@ -9,7 +11,10 @@
                 </span>
             </div>
         </div>
-        <font-awesome-icon class="newText" @click="getRandomText" :icon="['fas', 'rotate']" />
+        <div v-if="data.text" class="button">
+                <div class="tooltip">New Text</div>
+                <font-awesome-icon class="iconButton"  @click="getRandomText" :icon="['fas', 'rotate']" />
+        </div>
     </div>
 
 </template>
@@ -30,6 +35,7 @@
         letterIndex: 0,
         wordIndex:0,
         lineIndex: 0,
+        capslock: false,
         colors: [] as string[],
         words: [] as Word[],
         lines: [] as string[],
@@ -60,7 +66,8 @@
 
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
-        // just for reducing boiler plate from the data word
+        data.capslock = event.getModifierState("CapsLock");
+
 
         if(regex.test(key)){ // if its a normal text letter
             if(!data.started){
@@ -107,6 +114,11 @@
                     data.colors[data.letterIndex] = "gray";
                 }
             }
+
+            if(key == 'CapsLock'){
+                data.capslock = !data.capslock;
+            }
+
             if(key === ' ' && currentWord.start !== data.letterIndex){
                 data.letterIndex = data.words[++data.wordIndex].start
                 data.result.correctCharacters++;
@@ -233,6 +245,11 @@
         width: 100%;
         font-size: 1.7rem;
         font-family: 'RobotMono';
+        display: flex;
+        flex-direction: column;
+        @media screen and (max-width: 768px) {
+            align-items: center;
+        }
     }
     .text-line{
         padding: 2px 1px;
@@ -241,16 +258,26 @@
         font-weight: bold;
     }
 
-    .newText{
-        cursor: pointer;
-        
-        &:hover {
-            color: darken(#ffffff, 15%); /* Cor um pouco mais escura quando o cursor estiver em cima */
-        }
+    .capslockWarning{
+        color: black;
+        background-color: #ffcc00;
+        padding: 10px;
+        border-radius: 10px;
+        top: 0;
+        right: 0;
+        position: absolute;
     }
 
+
+    @keyframes is-rotating {
+        to {
+            transform: rotate(1turn);
+        }
+    }
     .typing-container{
+        position: relative;
         width: 80rem;
+        height: 20rem;
         max-width: 90%;
         display: flex;
         flex-direction: column;

@@ -30,9 +30,11 @@
 
 <style scoped>
     .timer-container{
-        align-self: self-start;
         font-family: 'RobotMono';
         font-size: clamp(1rem, 0.9074rem + 0.4938vw, 1.5rem);
         color: rgb(255, 157, 0);
+        position: absolute;
+        top: 0;
+        left: 0;
     }
 </style>

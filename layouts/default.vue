@@ -6,8 +6,8 @@
                 <img class="header-logo" src="~/assets/images/capy_logo.png">
             </div>
             <div class="options">
-                <font-awesome-icon :icon="['fas', 'user']" />
-                <font-awesome-icon :icon="['fas', 'gear']" />
+                <font-awesome-icon class="iconButton" @click="this.$router.push('/login')" :icon="['fas', 'user']" />
+                <font-awesome-icon class="iconButton" :icon="['fas', 'gear']" />
             </div>
         </div>
     </div>
@@ -42,7 +42,6 @@
 
 .options{
     display: flex;
-    gap: 2rem;
 }
 
 .title{

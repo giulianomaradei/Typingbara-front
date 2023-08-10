@@ -73,7 +73,8 @@
     }
 
     function inputHandler( event: InputEvent ){
-        keyPressed((event.target as HTMLInputElement).value)
+        keyPressed((event.target as HTMLInputElement).value);
+        (event.target as HTMLInputElement).value = "";
     }
 
     function keydownHandler( event: KeyboardEvent ){
@@ -89,7 +90,6 @@
         data.capslock = /^[A-Z]+$/.test(key)
 
         if (inputRef.value) {
-            console.log(inputRef.value)
             inputRef.value.focus();
         }
 

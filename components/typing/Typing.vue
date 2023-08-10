@@ -79,15 +79,13 @@
         }else{
             keyPressed(newInput.charAt(newInput.length-1));
         }
-
-
     })
 
     function keydownHandler( event: KeyboardEvent ){
         keyPressed( event.key )
     }
 
-    function keyPressed( key: string){
+    function keyPressed( key: string ){
         
         const regex = /^[a-zA-Z'.,:?!;()-]$/;
 
@@ -152,6 +150,20 @@
         }
     }
 
+    async function getRandomText() {
+        const text = await ((await $axios.get('https://random-word-api.vercel.app/api?words=200')).data);
+        const cleanedText = text
+            .join(" ")
+            .replace(/\n/g, ' ')
+            .replace(/[^a-zA-Z ]/g, '')
+            .toLowerCase()
+            .split(' ')
+            .filter((word: string) => word.length <= 6)
+            .join(' ');
+
+        setData(cleanedText);
+    }
+
     async function setData( text: string ){
         let newWords: Word[] = [];
         let word = "";
@@ -160,7 +172,7 @@
         data.letterIndex = 0,
         data.wordIndex = 0,
         data.lineIndex = 0,
-        data.absoluteLetterIndexes = [];
+        data.absoluteLetterIndexes = [] as number[][];
         data.started = false;
 
         for (var i = 0; i < text.length; i++) {
@@ -185,27 +197,12 @@
         data.colors = (new Array(data.text.length).fill('gray'))
     }
 
-    async function getRandomText() {
-        const text = await ((await $axios.get('https://random-word-api.vercel.app/api?words=200')).data);
-        const cleanedText = text
-            .join(" ")
-            .replace(/\n/g, ' ')
-            .replace(/[^a-zA-Z ]/g, '')
-            .toLowerCase()
-            .split(' ')
-            .filter((word: string) => word.length <= 6)
-            .join(' ');
-
-        setData(cleanedText);
-    }
-
-
-
     async function divideTextInLines() {
         
         let lines: string[] = [];
         let currentLine = "";
         let cumulativeCharacters= 0;
+        console.log("erro aqui");
         const containerWidth = document.getElementById("text-container")?.offsetWidth;
 
 
@@ -264,6 +261,10 @@
         inputRef.value = document.querySelector('#hidden-input');
         data.isMobile = window.innerWidth < 765
         getRandomText();
+    })
+
+    onUnmounted(()=>{
+        window.removeEventListener("keydown", keydownHandler)
     })
 
 </script>

@@ -213,6 +213,7 @@
 
             console.log("aqui o bug")
             const lineWidth = await getTextWidth( lineWithWord );
+            console.log("aqui o bug2")
 
             if (containerWidth && lineWidth < containerWidth) {
                 currentLine = lineWithWord;

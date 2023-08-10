@@ -34,7 +34,7 @@
     const { $axios, $router } = useNuxtApp();
 
     const inputRef = ref<HTMLInputElement | null>(null); 
-        console.log("AQUI")
+    
     const data = reactive({
         text: "",
         letterIndex: 0,
@@ -67,19 +67,31 @@
     function openMobileKeyboard() {
         
         if (inputRef.value) {
+            console.log(inputRef.value)
             inputRef.value.focus();
         }
     }
 
-    function keyPressed(event: KeyboardEvent){
-        const { key } = event;
+    function keyPressed(event: KeyboardEvent | InputEvent){
+        
+        let key = '';
+
+        if (event instanceof KeyboardEvent) {
+            key = event.key;
+        } else if (event instanceof InputEvent) {
+            key = (event.target as HTMLInputElement).value;
+        }
 
         const regex = /^[a-zA-Z'.,:?!;()-]$/;
 
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
-        data.capslock = event.getModifierState("CapsLock");
+        data.capslock = event instanceof KeyboardEvent ? event.getModifierState('CapsLock') : false;
 
+        if (inputRef.value) {
+            console.log(inputRef.value)
+            inputRef.value.focus();
+        }
 
         if(regex.test(key)){ // if its a normal text letter
             if(!data.started){
@@ -248,6 +260,9 @@
     onMounted(()=>{
         window.addEventListener("keydown", keyPressed )
         inputRef.value = document.querySelector('#hidden-input');
+        if (inputRef.value) {
+            inputRef.value.addEventListener('input', keyPressed as EventListener);
+        }
         getRandomText();
     })
 

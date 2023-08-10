@@ -67,10 +67,7 @@
     }
     
     function openMobileKeyboard() {
-        
         if (inputRef.value) {
-            console.log(inputRef.value)
-            inputRef.value.addEventListener('input', inputHandler as EventListener);
             inputRef.value.focus();
         }
     }
@@ -263,7 +260,9 @@
     onMounted(()=>{
         window.addEventListener("keydown", keydownHandler )
         inputRef.value = document.querySelector('#hidden-input');
-        inputRef.value?.addEventListener('input', inputHandler as EventListener);
+        nextTick(() => {
+            inputRef.value?.addEventListener('input', inputHandler as EventListener);
+        });
         data.isMobile = window.innerWidth < 765
         getRandomText();
     })

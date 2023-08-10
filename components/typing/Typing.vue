@@ -202,9 +202,8 @@
         let lines: string[] = [];
         let currentLine = "";
         let cumulativeCharacters= 0;
-        console.log("erro aqui");
         const containerWidth = document.getElementById("text-container")?.offsetWidth;
-
+        console.log("erro aqui");
 
         for (let i = 0; i < data.words.length; i++) {
             const word = data.words[i].word;

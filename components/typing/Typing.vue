@@ -262,9 +262,7 @@
     onMounted(()=>{
         window.addEventListener("keydown", keydownHandler )
         inputRef.value = document.querySelector('#hidden-input');
-        if (inputRef.value) {
-            inputRef.value.addEventListener('input', inputHandler as EventListener);
-        }
+        inputRef.value?.addEventListener('input', inputHandler as EventListener);
         data.isMobile = window.innerWidth < 765
         getRandomText();
     })

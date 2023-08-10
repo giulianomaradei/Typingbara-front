@@ -70,6 +70,7 @@
         
         if (inputRef.value) {
             console.log(inputRef.value)
+            inputRef.value.addEventListener('input', inputHandler as EventListener);
             inputRef.value.focus();
         }
     }

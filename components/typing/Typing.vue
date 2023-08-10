@@ -3,7 +3,7 @@
 
         <Timer v-if="data.started" :callback="finished"></Timer>
         <div class="capslockWarning" v-if="data.capslock">Capslock</div>
-        <input v-if="data.isMobile" ref="inputRef" id="hidden-input" type="text" style="position: absolute; opacity: 0">
+        <input v-if="data.isMobile" v-model="data.hiddenInputValue" ref="inputRef" id="hidden-input" type="text" style="position: absolute; opacity: 0">
         <div @click="openMobileKeyboard" id="text-container">
             <div v-for="(line, lineId) in displayedLines" :key="lineId">
                 <span v-for="(letter, letterId) in line" :key="letterId">
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 
-    import { computed, reactive, onMounted, ref } from 'vue';
+    import { computed, reactive, onMounted, ref, watch } from 'vue';
     import { useTypingStore } from '../../store/typing/typingStore'
     import { Word, Result } from 'types/typing/index'
     import Timer from './Timer.vue'
@@ -55,6 +55,7 @@
             wrongCharacters: 0,
         } as Result,
 
+        hiddenInputValue: "",
         isMobile: false,
     })
 
@@ -71,11 +72,16 @@
             inputRef.value.focus();
         }
     }
+    
+    watch(() => data.hiddenInputValue, async(newInput, oldInput) =>{
+        if(oldInput.length > newInput.length){
+            keyPressed("Backspace");
+        }else{
+            keyPressed(newInput);
+        }
 
-    function inputHandler( event: InputEvent ){
-        keyPressed((event.target as HTMLInputElement).value);
-        (event.target as HTMLInputElement).value = "";
-    }
+        data.hiddenInputValue = "";
+    })
 
     function keydownHandler( event: KeyboardEvent ){
         keyPressed( event.key )
@@ -88,10 +94,6 @@
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
         data.capslock = /^[A-Z]+$/.test(key)
-
-        if (inputRef.value) {
-            inputRef.value.focus();
-        }
 
         if(regex.test(key)){ // if its a normal text letter
             if(!data.started){
@@ -260,9 +262,6 @@
     onMounted(()=>{
         window.addEventListener("keydown", keydownHandler )
         inputRef.value = document.querySelector('#hidden-input');
-        nextTick(() => {
-            inputRef.value?.addEventListener('input', inputHandler as EventListener);
-        });
         data.isMobile = window.innerWidth < 765
         getRandomText();
     })

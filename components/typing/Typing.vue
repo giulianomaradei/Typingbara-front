@@ -81,10 +81,8 @@
             key = event.key;
         } else if (event instanceof InputEvent) {
             key = (event.target as HTMLInputElement).value;
-            if(inputRef.value){
-                inputRef.value.value = ''; // Zerar o valor do campo de entrada
-                inputRef.value.focus(); 
-            }
+            (event.target as HTMLInputElement).value = ''; // Zerar o valor do campo de entrada
+            (event.target as HTMLInputElement).focus(); 
         }
 
 

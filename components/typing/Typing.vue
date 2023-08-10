@@ -151,7 +151,7 @@
     }
 
     async function getRandomText() {
-        const text = await ((await $axios.get('https://random-word-api.vercel.app/api?words=200')).data);
+        const text = (await $axios.get('https://random-word-api.vercel.app/api?words=200')).data;
         const cleanedText = text
             .join(" ")
             .replace(/\n/g, ' ')
@@ -204,6 +204,8 @@
         let cumulativeCharacters= 0;
         const containerWidth = document.getElementById("text-container")?.offsetWidth;
         
+        console.log(data.words)
+
 
         for (let i = 0; i < data.words.length; i++) {
             const word = data.words[i].word;
@@ -236,7 +238,7 @@
             data.absoluteLetterIndexes.push(lineAbsoluteIndexes);
         }
 
-        console.log("erro aqui");
+        
         return lines;
     }
 

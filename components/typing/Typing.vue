@@ -210,6 +210,8 @@
         for (let i = 0; i < data.words.length; i++) {
             const word = data.words[i].word;
             const lineWithWord = currentLine ? currentLine + " " + word : word;
+
+            console.log("aqui o bug")
             const lineWidth = await getTextWidth( lineWithWord );
 
             if (containerWidth && lineWidth < containerWidth) {

@@ -203,7 +203,7 @@
         let currentLine = "";
         let cumulativeCharacters= 0;
         const containerWidth = document.getElementById("text-container")?.offsetWidth;
-        console.log("erro aqui");
+        
 
         for (let i = 0; i < data.words.length; i++) {
             const word = data.words[i].word;
@@ -236,6 +236,7 @@
             data.absoluteLetterIndexes.push(lineAbsoluteIndexes);
         }
 
+        console.log("erro aqui");
         return lines;
     }
 

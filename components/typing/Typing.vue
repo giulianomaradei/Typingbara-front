@@ -211,9 +211,7 @@
             const word = data.words[i].word;
             const lineWithWord = currentLine ? currentLine + " " + word : word;
 
-            console.log("aqui o bug")
             const lineWidth = await getTextWidth( lineWithWord );
-            console.log("aqui o bug2")
 
             if (containerWidth && lineWidth < containerWidth) {
                 currentLine = lineWithWord;
@@ -246,6 +244,7 @@
     }
 
     async function getTextWidth(text: string) {
+        await document.fonts.ready;
         const container = document.getElementById('text-container');
         const span = document.createElement('span');
         span.innerText = text;
@@ -253,7 +252,6 @@
         
         if (container) {
             container.appendChild(span);
-            await document.fonts.ready; // Wait for the font to be loaded
             const width = span.offsetWidth;
             container.removeChild(span);
             return width;

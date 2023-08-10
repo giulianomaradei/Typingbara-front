@@ -77,10 +77,10 @@
         if(oldInput.length > newInput.length){
             keyPressed("Backspace");
         }else{
-            keyPressed(newInput);
+            keyPressed(newInput.charAt(newInput.length-1));
         }
 
-        data.hiddenInputValue = "";
+
     })
 
     function keydownHandler( event: KeyboardEvent ){

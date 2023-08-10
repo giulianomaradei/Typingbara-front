@@ -244,11 +244,16 @@
         const span = document.createElement('span');
         span.innerText = text;
         span.style.whiteSpace = 'nowrap';
-        container?.appendChild(span);
-        await document.fonts.ready; // Wait for the font to be loaded
-        const width = span.offsetWidth;
-        container?.removeChild(span);
-        return width;
+        
+        if (container) {
+            container.appendChild(span);
+            await document.fonts.ready; // Wait for the font to be loaded
+            const width = span.offsetWidth;
+            container.removeChild(span);
+            return width;
+        }
+        
+        return 0; 
     }
  
     const displayedLines = computed(()=>{

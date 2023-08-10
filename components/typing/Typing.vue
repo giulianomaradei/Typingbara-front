@@ -74,25 +74,21 @@
         }
     }
 
-    function keyPressed(event: KeyboardEvent | InputEvent){
+    function inputHandler( event: InputEvent ){
+        keyPressed((event.target as HTMLInputElement).value)
+    }
+
+    function keydownHandler( event: KeyboardEvent ){
+        keyPressed( event.key )
+    }
+
+    function keyPressed( key: string){
         
-        let key = '';
-
-        if (event instanceof KeyboardEvent) {
-            key = event.key;
-        } else if (event instanceof InputEvent) {
-            key = (event.target as HTMLInputElement).value;
-            (event.target as HTMLInputElement).value = ''; // Zerar o valor do campo de entrada
-            (event.target as HTMLInputElement).focus(); 
-        }
-
-
-
         const regex = /^[a-zA-Z'.,:?!;()-]$/;
 
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
-        data.capslock = event instanceof KeyboardEvent ? event.getModifierState('CapsLock') : false;
+        data.capslock = /^[A-Z]+$/.test(key)
 
         if (inputRef.value) {
             console.log(inputRef.value)
@@ -159,7 +155,7 @@
     async function setData( text: string ){
         let newWords: Word[] = [];
         let word = "";
-        let start=0,lastWritedIndes;
+        let start=0;
 
         data.letterIndex = 0,
         data.wordIndex = 0,
@@ -264,14 +260,12 @@
     })
 
     onMounted(()=>{
-        window.addEventListener("keydown", keyPressed )
+        window.addEventListener("keydown", keydownHandler )
         inputRef.value = document.querySelector('#hidden-input');
         if (inputRef.value) {
-            inputRef.value.addEventListener('input', keyPressed as EventListener);
+            inputRef.value.addEventListener('input', inputHandler as EventListener);
         }
-        if(window.innerWidth < 765){
-            data.isMobile = true;
-        }
+        data.isMobile = window.innerWidth < 765
         getRandomText();
     })
 

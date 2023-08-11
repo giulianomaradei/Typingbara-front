@@ -3,7 +3,7 @@
         <div class="result">
             <div>WPM: {{ result.wordsPerMinute }}</div>
             <div>Accuaracy: {{ result.accuracy }}%</div>
-            <div>C&W: {{ `${result.correctCharacters}/${result.wrongCharacters}`  }}</div>
+            <div>Correct/Wrong: {{ `${result.correctCharacters}/${result.wrongCharacters}`  }}</div>
         </div>
         <div>
             <div class="button">

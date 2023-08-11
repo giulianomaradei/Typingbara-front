@@ -245,19 +245,17 @@
 
     async function getTextWidth(text: string) {
         await document.fonts.ready;
-        const container = document.getElementById('text-container');
-        const span = document.createElement('span');
-        span.innerText = text;
-        span.style.whiteSpace = 'nowrap';
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d');
         
-        if (container) {
-            container.appendChild(span);
-            const width = span.offsetWidth;
-            container.removeChild(span);
-            return width;
+        if (!context) {
+            return 0;
         }
         
-        return 0; 
+        context.font = '1.7rem RobotMono'; // Adjust the font size and style as needed
+        const width = context.measureText(text).width;
+        
+        return width;
     }
  
     const displayedLines = computed(()=>{

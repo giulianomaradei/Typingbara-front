@@ -249,7 +249,7 @@
         const context = canvas.getContext('2d');
         
         if (!context) {
-            return 0;
+            return Infinity;
         }
         
         context.font = '1.7rem RobotMono'; // Adjust the font size and style as needed

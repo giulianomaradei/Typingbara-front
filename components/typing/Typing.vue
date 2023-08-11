@@ -161,7 +161,7 @@
             .filter((word: string) => word.length <= 6)
             .join(' ');
 
-        setData(cleanedText);
+        await setData(cleanedText);
     }
 
     async function setData( text: string ){

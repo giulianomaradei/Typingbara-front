@@ -8,7 +8,7 @@
         <div>
             <div class="button">
                 <div class="tooltip">Next Text</div>
-                <font-awesome-icon @click="this.$router.push('/')" class="iconButton" :icon="['fas', 'arrow-right']" />
+                <font-awesome-icon @click="$router.push('/')" class="iconButton" :icon="['fas', 'arrow-right']" />
             </div>
         </div>
     </div>

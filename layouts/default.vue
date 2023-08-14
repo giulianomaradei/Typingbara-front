@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="header">
-            <div class="logo">
+            <div class="logo" @click="this.$router.push('/')">
                 <div class="title">Capybara Type</div>
                 <img class="header-logo" src="~/assets/images/capy_logo.png">
             </div>
@@ -38,6 +38,7 @@
 
 .logo{
     display: flex;
+    cursor: pointer;
 }
 
 .options{

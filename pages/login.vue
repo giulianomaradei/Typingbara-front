@@ -33,29 +33,10 @@
 </script>
 
 <style lang="scss" scoped>
-    .card {
-        background: #565656;
-        border-radius: 8px;
-        box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.65);
 
-        margin: 6rem auto 8.1rem auto;
-        width: 27rem;
-        max-width: 80%;
+    .card{
+        width: 32rem;
     }
-
-    .card-content {
-        padding: 12px 44px;
-    }
-
-    .card-title {
-        font-family: RobotMono;
-        font-size: clamp(1.2rem, 0.9183rem + 0.9014vw, 2rem);
-        letter-spacing: 4px;
-        padding-bottom: 23px;
-        padding-top: 13px;
-        text-align: center;
-    }
-
     .buttons{
         display: flex;
         gap: 5px;
@@ -79,19 +60,7 @@
         }
     }
 
-    form{
-        display: flex;
-        align-items: left;
-        flex-direction: column;
-    }
 
-    input:hover {
-        border-bottom: 1px solid #ffffff;
-    }
-
-    input:focus {
-        border-bottom: 1px solid #ffffff;
-    }
 
     .changeViewButton{
         align-self: center;
@@ -102,20 +71,6 @@
         &:hover{
             color: #d1d1d1;
         }
-    }
-
-
-    input {
-        margin: 20px 0;
-        padding: 10px;
-        width: 90%;
-        border: none;
-        outline: none;
-        border-bottom: 1px solid #d1d1d1;
-        color: white;
-        font-size: clamp(1rem, 0.9296rem + 0.2254vw, 1.2rem);
-        font-family: RobotMono;
-        background-color: transparent;
     }
 
 </style>

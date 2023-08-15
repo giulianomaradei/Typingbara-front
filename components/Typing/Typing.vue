@@ -14,9 +14,9 @@
         </div>
 
         <div v-if="!data.text" class="c-loader"></div>
-        <div v-else class="button">
-                <div class="tooltip">New Text</div>
-                <font-awesome-icon class="iconButton"  @click="getRandomText" :icon="['fas', 'rotate']" />
+        <div class="button">
+            <div class="tooltip">New Text</div>
+            <font-awesome-icon class="iconButton" @click="getRandomText" icon="fa-solid fa-rotate" />
         </div>
     </div>
 

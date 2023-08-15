@@ -2,21 +2,27 @@
     <div class="card">
         <div class="card-content">
             <div class="card-title">{{ data.view }}</div>
-            <form>
+            <form onsubmit="">
                 <input v-model="data.email" placeholder="Email">
-                <div class="password-container">
-                    <input v-model="data.password" :type="data.showPassword ? 'text' : 'password'" placeholder="Password">
-                    <button @click="togglePasswordVisibility">
-                        <font-awesome-icon v-if="data.showPassword" icon="fa-solid fa-eye" />
-                        <font-awesome-icon v-if="!data.showPassword" icon="fa-solid fa-eye-slash" />
-                    </button>
+
+                <div v-if="data.view === 'Login'" class="password-container">
+                    <input v-model="data.password" :type="showPassword ? 'text' : 'password'" placeholder="Password">
+                    <a @click="togglePasswordVisibility">
+                        <font-awesome-icon v-if="showPassword" icon="fa-solid fa-eye" />
+                        <font-awesome-icon v-else icon="fa-solid fa-eye-slash" />
+                    </a>
                 </div>
-                <input v-model="data.confirmPassword" v-if="data.view === 'Register'" placeholder="Confirm Password">
-                <div v-if="data.view === 'Login'" class="buttons">
-                    <button class="submit-btn">Login</button>
-                    <button class="google-button submit-btn">Login with Google<span class="google-icon"></span></button>
+
+
+                <input v-if="data.view === 'Register'" v-model="data.password" :type="'password'" placeholder="Password">
+                <input v-if="data.view === 'Register'" v-model="data.confirmPassword" :type="'password'" placeholder="Confirm Password">
+
+
+                <div class="buttons">
+                    <button v-if="data.view === 'Login'" class="submit-btn">Login</button>
+                    <button v-if="data.view === 'Login'" class="google-button submit-btn">Login with Google<span class="google-icon"></span></button>
+                    <button v-if="data.view === 'Register'" class="submit-btn">Register</button>
                 </div>
-                <button v-else class="submit-btn">Register</button>
                 <div @click="changeView" class="changeViewButton">Don't have a account?</div>
             </form>
         </div>
@@ -25,22 +31,24 @@
 
 <script setup lang="ts">
 
+    import { ref } from 'vue';
+    const showPassword = ref(false);
+
     const data = reactive({
         view: 'Login',
         email: "",
         password: "",
         confirmPassword: "",
-        showPassword: false
     });
 
     function changeView(){
         data.view = data.view === 'Login' ? 'Register' : 'Login';
     }
 
-    async function togglePasswordVisibility(){
-        data.showPassword = !data.showPassword
-        await nextTick();
+    const togglePasswordVisibility = () => {
+        showPassword.value = !showPassword.value;
     };
+    
 </script>
 
 <style lang="scss" scoped>

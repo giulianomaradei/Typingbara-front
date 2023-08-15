@@ -6,8 +6,8 @@
                 <img class="header-logo" src="~/assets/images/capy_logo.png">
             </div>
             <div class="options">
-                <font-awesome-icon class="iconButton" @click="this.$router.push('/login')" :icon="['fas', 'user']" />
-                <font-awesome-icon class="iconButton" :icon="['fas', 'gear']" />
+                <font-awesome-icon class="iconButton" @click="this.$router.push('/login')" :icon="faUser" />
+                <font-awesome-icon class="iconButton" :icon="faGear" />
             </div>
         </div>
     </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-
+    import { faUser, faGear } from '@fortawesome/free-solid-svg-icons';
 </script>
 
 <style lang="css" scoped>

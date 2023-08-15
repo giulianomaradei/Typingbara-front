@@ -2,7 +2,7 @@
     <div>
         <div class="header">
             <div class="logo" @click="this.$router.push('/')">
-                <div class="title">Capybara Type</div>
+                <div class="title">Typingbara</div>
                 <img class="header-logo" src="~/assets/images/capy_logo.png">
             </div>
             <div class="options">
@@ -12,9 +12,10 @@
         </div>
     </div>
     
-    <div class="container">
+    <div class="main-container">
         <slot />
     </div>
+    
 </template>
 
 <script setup>
@@ -23,13 +24,14 @@
 
 <style lang="css" scoped>
 
+
 .header{
     width: 100vw;
-    height: 7rem;
+    height: 20vh;
     margin: 0 auto;
     padding: 2rem 10%;
 
-    position: fixed;
+
     display: flex;
     justify-content:space-between;
     align-items: center;
@@ -46,7 +48,7 @@
 }
 
 .title{
-    font-size: clamp(2rem, 1.6296rem + 1.9753vw, 4rem);
+    font-size: clamp(1.5rem, 0.7952rem + 4.3373vw, 6rem);
     color: rgb(255, 255, 255);
     font-family: "TiltNeon";
     @media screen and (max-width: 768px) {
@@ -62,8 +64,8 @@
     height: 4rem;
 }
 
-.container{
-    height: 100vh;
+.main-container{
+    height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;

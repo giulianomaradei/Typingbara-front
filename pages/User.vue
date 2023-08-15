@@ -7,14 +7,16 @@
         </div>
         <div class="card statistcs-container">
             <div class="rank"><span><font-awesome-icon class="icon" icon="fa-solid fa-crown" /></span> 2nd place</div>
-            <div><span>MAX WPM:</span> 124</div>
-            <div><span>AVG WPM:</span> 112</div>
-            <div><span>AVG ACC:</span> 87%</div>
-            <div><span>TOTAL TESTS:</span> 34</div>
+            <div class="statistcs">
+                <div><span>MAX WPM:</span> 124</div>
+                <div><span>AVG WPM:</span> 112</div>
+                <div><span>AVG ACC:</span> 87%</div>
+                <div><span>TOTAL TESTS:</span> 34</div>
+            </div>
         </div>
-        <div>
-            <chart :chartData="chartData" :chartOptions="chartOptions"></chart>
-        </div>
+        
+        <chart class="chart" :chartData="chartData" :chartOptions="chartOptions"></chart>
+        
 
     </div>
 </template>
@@ -25,7 +27,6 @@
 
     const showPassword = ref(false);
     const chartData = {
-        labels: ["2023-02-13", "2023-02-14", "2023-02-15", "2023-02-16"],
         datasets: [{
             label: "WPM",
             data: [120, 140, 98, 89],
@@ -36,7 +37,8 @@
             borderWidth: 3,
             pointRadius: 6,
             tension: 0.1,
-        }]
+        }],
+        labels: ["2023-02-13", "2023-02-14", "2023-02-15", "2023-02-16"]
     };
 
     const chartOptions = {
@@ -48,7 +50,7 @@
                     display: true,
                     text: 'Dates',
                     font: {
-                        size: 20, // Ajuste o tamanho da fonte para o título do eixo X
+                        size: 16, // Ajuste o tamanho da fonte para o título do eixo X
                         family: 'RobotMono'
                     }
                 }
@@ -56,9 +58,9 @@
             y: {
                 title: {
                     display: true,
-                    text: 'Words Per Minute (WPM)',
+                    text: 'WPM',
                     font: {
-                        size: 20, // Ajuste o tamanho da fonte para o título do eixo X
+                        size: 16, // Ajuste o tamanho da fonte para o título do eixo X
                         family: 'RobotMono'
                     }
                 }
@@ -100,28 +102,30 @@
     }
     .profile-container{
         display: flex;
-        gap:2rem;
+        gap: clamp(1rem, 0.6479rem + 1.1268vw, 2rem);
         flex-wrap: wrap;
         justify-content: center;
         align-items: stretch;
-        max-width: 80%;
         width: 90rem;
+        max-width: 95vw;
     }
 
     .user-container{
         display: flex;
-        justify-content:space-around;
+        justify-content:center;
         align-items: center;
         flex-grow: 1;
-
+        margin: 0;
+        gap: 20px;
+        height: clamp(4rem, 3.0602rem + 5.7831vw, 10rem);
         .round-image {
-            width: 8rem;
-            height: 8rem;
+            width: clamp(3rem, 2.2169rem + 4.8193vw, 8rem);
+            height: clamp(3rem, 2.2169rem + 4.8193vw, 8rem);
             border-radius: 50%;
             object-fit: cover;
         }
         .username{
-            font-size: 3.5rem;
+            font-size: clamp(1.5rem, 1.1867rem + 1.9277vw, 3.5rem);
         }
     }
 
@@ -129,14 +133,26 @@
         display: flex;
         flex-direction: row;
         flex-grow: 3;
-        justify-content: space-between;
-        position: relative;
+        justify-content: center;
         align-items: center;
+        position: relative;
+        gap: 5%;
+        margin: 0;
+        height: clamp(7rem, 6.5301rem + 2.8916vw, 10rem);;
+
+        .statistcs{
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            gap: 10% 5%;
+        }
 
         div{
-            font-size: 1.4rem;
+            font-size: clamp(0.9rem, 0.8217rem + 0.4819vw, 1.4rem);
             span{
                 color: rgb(255, 174, 0);
+                font-size: clamp(0.9rem, 0.8217rem + 0.4819vw, 1.4rem);
                 font-weight: bold;
             }
         }
@@ -146,6 +162,11 @@
             top: 10px;
             left: 10px;
         }
+    }
+
+    .chart{
+        width: 100%;
+        height: 30vh;
     }
     
 </style>

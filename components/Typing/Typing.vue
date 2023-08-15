@@ -91,9 +91,12 @@
 
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
-        data.capslock = /^[A-Z]+$/.test(key)
-
+        
+        console.log(key);
+        
         if(regex.test(key)){ // if its a normal text letter
+            data.capslock = /^[A-Z]$/.test(key)
+            
             if(!data.started){
                 data.started = true;
             }
@@ -139,8 +142,9 @@
                 }
             }
 
-            if(key == 'CapsLock'){
-                data.capslock = !data.capslock;
+            if(key === 'CapsLock'){
+                data.capslock = data.capslock ? false : true;
+                console.log(data.capslock)
             }
 
             if(key === ' ' && currentWord.start !== data.letterIndex){

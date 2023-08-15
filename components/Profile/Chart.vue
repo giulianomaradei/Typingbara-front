@@ -1,6 +1,6 @@
 <template>
     <div>
-      <Line class="chart" :data="chartData" :options="chartOptions"></Line>
+      <Line :data="chartData" :options="chartOptions"></Line>
     </div>
 </template>
 
@@ -16,7 +16,6 @@
         Tooltip,
         Legend
     } from 'chart.js'
-    import * as chartConfig from './chartConfig.js'
 
     ChartJS.register(
         CategoryScale,
@@ -44,5 +43,6 @@
 <style scoped>
     .chart{
         width: 50rem;
+        width: clamp(20rem, 9.4366rem + 33.8028vw, 50rem);
     }
 </style>

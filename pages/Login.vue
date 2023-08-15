@@ -4,7 +4,13 @@
             <div class="card-title">{{ data.view }}</div>
             <form>
                 <input v-model="data.email" placeholder="Email">
-                <input v-model="data.password" placeholder="Password">
+                <div class="password-container">
+                    <input v-model="data.password" :type="data.showPassword ? 'text' : 'password'" placeholder="Password">
+                    <button @click="togglePasswordVisibility">
+                        <font-awesome-icon v-if="data.showPassword" icon="fa-solid fa-eye" />
+                        <font-awesome-icon v-if="!data.showPassword" icon="fa-solid fa-eye-slash" />
+                    </button>
+                </div>
                 <input v-model="data.confirmPassword" v-if="data.view === 'Register'" placeholder="Confirm Password">
                 <div v-if="data.view === 'Login'" class="buttons">
                     <button class="submit-btn">Login</button>
@@ -18,28 +24,41 @@
 </template>
 
 <script setup lang="ts">
+
     const data = reactive({
         view: 'Login',
         email: "",
         password: "",
-        confirmPassword: ""
+        confirmPassword: "",
+        showPassword: false
     });
 
     function changeView(){
         data.view = data.view === 'Login' ? 'Register' : 'Login';
     }
+
+    async function togglePasswordVisibility(){
+        data.showPassword = !data.showPassword
+        await nextTick();
+    };
 </script>
 
 <style lang="scss" scoped>
 
     .card{
-        width: 45rem;
+        width: 40rem;
     }
 
     .card-title{
         color: rgb(255, 255, 255);
-        font-size: clamp(1.5rem, 1.2651rem + 1.4458vw, 3rem);
+        font-size: clamp(1rem, 0.812rem + 1.1566vw, 2.2rem);
         font-weight: bold;
+    }
+
+    .password-container {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
     }
     .buttons{
         display: flex;
@@ -56,9 +75,9 @@
             font-family: RobotMono;
             height: 4rem;
             margin-top: 50px;
-            font-size: 1.1rem;
             transition: 0.25s;
             width: 153px;
+            font-size: clamp(0.8rem, 0.753rem + 0.2892vw, 1.1rem);
 
             &:hover{
                 box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.35);

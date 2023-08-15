@@ -48,7 +48,7 @@
 }
 
 .title{
-    font-size: clamp(1.5rem, 0.7952rem + 4.3373vw, 6rem);
+    font-size: clamp(1.5rem, 1.0301rem + 2.8916vw, 4.5rem);
     color: rgb(255, 255, 255);
     font-family: "TiltNeon";
     @media screen and (max-width: 768px) {

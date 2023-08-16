@@ -25,27 +25,11 @@
                     <span class="wpm-unit"> wpm</span>
                 </div>
             </div>
-            <div class="pagination">
-                <button @click="data.pagination.page--" :disabled="data.pagination.page === 1">Previous</button>
-                <span>Page {{ data.pagination.page }}</span>
-                <button @click="data.pagination.page++" :disabled="data.pagination.page * data.pagination.take >= recorderList.length">Next</button>
-            </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-
-    const { $axios } = useNuxtApp();
-    import { LeaderboardService } from '~/Services/LeaderboardService';
-
-    const data = reactive({
-        leaderboardList: [] as { wpm: string; name: string }[],
-        pagination: {
-            page: 1,
-            take: 4
-        }
-    })
 
     const recorderList = [
         { name: 'Eva', wpm: '140' },
@@ -78,21 +62,6 @@
         }
         return ""; // Default class
     };
-
-    async function fetchData() {
-        try {
-            const skip = (data.pagination.page - 1) * data.pagination.take;
-            const take = data.pagination.take;
-            const response = await LeaderboardService.getRecords(skip, take);
-            data.leaderboardList = response.data;
-        } catch (error) {
-            // Lidar com erros aqui
-        }
-    }
-    
-    onMounted(()=>{
-        //fetchData();
-    })
 
 </script>
 
@@ -135,28 +104,6 @@
 
     .bronze {
         color: #cd7f32; /* Bronze color */
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        align-self: flex-end;
-    }
-
-    .pagination button {
-        padding: 0.5rem 1rem;
-        background-color: #3490dc;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin: 0 0.5rem;
-    }
-
-    .pagination button:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
     }
 
     @media (max-width: 560px) {

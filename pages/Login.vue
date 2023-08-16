@@ -81,7 +81,7 @@
             cursor: pointer;
             color: white;
             font-family: RobotMono;
-            height: 4rem;
+            height: clamp(2.5rem, 2.2651rem + 1.4458vw, 4rem);
             margin-top: 50px;
             transition: 0.25s;
             width: 153px;

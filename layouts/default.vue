@@ -7,14 +7,18 @@
             </div>
             <div class="options">
                 <div class="button">
-                    <div class="tooltip">Multiplayer</div>
-                    <font-awesome-icon class="iconButton multiplayer-icon" :icon="faGamepad" />
+                    <div class="tooltip">Mystery</div>
+                    <font-awesome-icon class="iconButton multiplayer-icon" :icon="['fas', 'gamepad']" />
                 </div>
                 <div class="button">
                     <div class="tooltip">Profile</div>
-                    <font-awesome-icon class="iconButton" @click="$router.push('/login')" :icon="faUser" />
+                    <font-awesome-icon class="iconButton" @click="$router.push('/login')" :icon="['fas', 'user']" />
                 </div>
-                
+
+                <div class="button">
+                    <div class="tooltip">Leaderboard</div>
+                    <font-awesome-icon class="iconButton" @click="$router.push('/leaderboard')" :icon="['fas', 'ranking-star']" />
+                </div>
             </div>
         </div>
     </div>
@@ -26,7 +30,6 @@
 </template>
 
 <script setup>
-    import { faUser, faGamepad } from '@fortawesome/free-solid-svg-icons';
 </script>
 
 <style lang="css" scoped>

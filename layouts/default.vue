@@ -6,8 +6,15 @@
                 <img class="header-logo" src="~/assets/images/capy_logo.png">
             </div>
             <div class="options">
-                <font-awesome-icon class="iconButton" @click="$router.push('/login')" :icon="faUser" />
-                <font-awesome-icon class="iconButton" :icon="faGear" />
+                <div class="button">
+                    <div class="tooltip">Multiplayer</div>
+                    <font-awesome-icon class="iconButton multiplayer-icon" :icon="faGamepad" />
+                </div>
+                <div class="button">
+                    <div class="tooltip">Profile</div>
+                    <font-awesome-icon class="iconButton" @click="$router.push('/login')" :icon="faUser" />
+                </div>
+                
             </div>
         </div>
     </div>
@@ -19,7 +26,7 @@
 </template>
 
 <script setup>
-    import { faUser, faGear } from '@fortawesome/free-solid-svg-icons';
+    import { faUser, faGamepad } from '@fortawesome/free-solid-svg-icons';
 </script>
 
 <style lang="css" scoped>
@@ -45,6 +52,49 @@
 
 .options{
     display: flex;
+}
+
+.multiplayer-icon{
+    animation: rainbow 1.2s linear infinite;
+}
+
+@keyframes rainbow{
+		100%,0%{
+			color: rgb(255,0,0);
+		}
+		8%{
+			color: rgb(255,127,0);
+		}
+		16%{
+			color: rgb(255,255,0);
+		}
+		25%{
+			color: rgb(127,255,0);
+		}
+		33%{
+			color: rgb(0,255,0);
+		}
+		41%{
+			color: rgb(0,255,127);
+		}
+		50%{
+			color: rgb(0,255,255);
+		}
+		58%{
+			color: rgb(0,127,255);
+		}
+		66%{
+			color: rgb(0,0,255);
+		}
+		75%{
+			color: rgb(127,0,255);
+		}
+		83%{
+			color: rgb(255,0,255);
+		}
+		91%{
+			color: rgb(255,0,127);
+		}
 }
 
 .title{

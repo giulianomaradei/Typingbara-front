@@ -5,10 +5,11 @@ body {
     font-family: RobotMono;
 }
 
+
 .iconButton{
     cursor: pointer;
     padding: 13px;
-    font-size: clamp(1rem, 0.9296rem + 0.2254vw, 1.2rem);
+    font-size: clamp(1rem, 0.953rem + 0.2892vw, 1.3rem);
     border-radius: 15px;
     &:hover{
         background-color: #3b3b3b;
@@ -21,7 +22,7 @@ body {
     align-items: center;
     justify-content: center;
     position: relative;
-    width: 10rem;
+    width: 6rem;
 
     .tooltip {
         position: absolute;

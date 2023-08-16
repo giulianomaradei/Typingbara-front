@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="header">
-            <div class="logo" @click="this.$router.push('/')">
+            <div class="logo" @click="$router.push('/')">
                 <div class="title">Typingbara</div>
                 <img class="header-logo" src="~/assets/images/capy_logo.png">
             </div>
             <div class="options">
-                <font-awesome-icon class="iconButton" @click="this.$router.push('/login')" :icon="faUser" />
+                <font-awesome-icon class="iconButton" @click="$router.push('/login')" :icon="faUser" />
                 <font-awesome-icon class="iconButton" :icon="faGear" />
             </div>
         </div>

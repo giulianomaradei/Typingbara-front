@@ -43,6 +43,9 @@
 
     function changeView(){
         data.view = data.view === 'Login' ? 'Register' : 'Login';
+        data.email = "";
+        data.password = "";
+        data.confirmPassword = ""
     }
 
     const togglePasswordVisibility = () => {

@@ -37,6 +37,10 @@
         flex-direction: column;
         align-items: center;
         gap: 2rem;
+
+        @media screen and (max-width: 768px) {
+            text-align: center;
+        }
     }
 
     span{

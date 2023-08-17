@@ -40,7 +40,7 @@
     height: 20vh;
     margin: 0 auto;
     padding: 2rem 10%;
-
+    position: fixed;
 
     display: flex;
     justify-content:space-between;
@@ -122,5 +122,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
 }
 </style>

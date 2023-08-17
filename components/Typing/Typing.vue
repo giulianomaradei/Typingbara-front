@@ -208,9 +208,6 @@
         let currentLine = "";
         let cumulativeCharacters= 0;
         const containerWidth = document.getElementById("text-container")?.offsetWidth;
-        
-        console.log(containerWidth)
-
 
         for (let i = 0; i < data.words.length; i++) {
             const word = data.words[i].word;

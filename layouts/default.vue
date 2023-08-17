@@ -41,6 +41,8 @@
     margin: 0 auto;
     padding: 2rem 10%;
     position: fixed;
+    top: 0;
+    left: 0;
 
     display: flex;
     justify-content:space-between;
@@ -118,11 +120,11 @@
 }
 
 .main-container{
-    height: 100vh;
+    height: 80vh;
     display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-
+    margin-top: 20vh;
 }
 </style>

@@ -118,12 +118,11 @@
 }
 
 .main-container{
-    height: 80vh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     box-sizing: border-box;
-    position: fixed;
-    bottom: 0;
+
 }
 </style>

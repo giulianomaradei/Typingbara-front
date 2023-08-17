@@ -26,6 +26,10 @@
             }
         },1000)
     })
+
+    onUnmounted(() => {
+        clearInterval(data.interval!);
+    })
 </script>
 
 <style scoped>

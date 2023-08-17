@@ -38,7 +38,7 @@
         align-items: center;
         gap: 2rem;
 
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: 600px) {
             text-align: center;
         }
     }

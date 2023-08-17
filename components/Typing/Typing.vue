@@ -148,7 +148,8 @@
             }
 
             if(key === ' ' && currentWord.start !== data.letterIndex){
-                data.letterIndex = data.words[++data.wordIndex].start
+                data.letterIndex = data.words[data.wordIndex + 1].start
+                data.wordIndex++;
                 data.result.correctCharacters++;
             }
         }

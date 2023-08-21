@@ -16,7 +16,7 @@
 
 <script setup>
     import { computed, reactive, onMounted } from 'vue';
-    import { useTypingStore } from '../store/typing/typingStore'
+    import { useTypingStore } from '~/store/Typing/TypingStore'; 
 
     const store = useTypingStore();
     const route = useRoute()

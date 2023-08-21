@@ -2,7 +2,8 @@
     <div class="card">
         <div class="card-content">
             <div class="card-title">{{ data.view }}</div>
-            <form onsubmit="">
+            <form>
+                <input v-if="data.view === 'Register'" v-model="data.name" placeholder="Username">
                 <input v-model="data.email" placeholder="Email">
 
                 <div v-if="data.view === 'Login'" class="password-container">
@@ -19,9 +20,9 @@
 
 
                 <div class="buttons">
-                    <button v-if="data.view === 'Login'" class="submit-btn">Login</button>
+                    <button @click.prevent="loginHandler" v-if="data.view === 'Login'" class="submit-btn">Login</button>
                     <button v-if="data.view === 'Login'" class="google-button submit-btn">Login with Google<span class="google-icon"></span></button>
-                    <button v-if="data.view === 'Register'" class="submit-btn">Register</button>
+                    <button @click.prevent="registerHandler" v-if="data.view === 'Register'" class="submit-btn">Register</button>
                 </div>
                 <div @click="changeView" class="changeViewButton">Don't have a account?</div>
             </form>
@@ -32,10 +33,15 @@
 <script setup lang="ts">
 
     import { ref } from 'vue';
+    import { useTypingStore } from '~/store/Typing/TypingStore';
+    const { $router, $axios } = useNuxtApp();
+    
+    const typingStore = useTypingStore();
     const showPassword = ref(false);
 
     const data = reactive({
         view: 'Login',
+        name: "",
         email: "",
         password: "",
         confirmPassword: "",
@@ -46,6 +52,42 @@
         data.email = "";
         data.password = "";
         data.confirmPassword = ""
+    }
+
+    async function loginHandler() {
+        try {
+            const response = await $axios.post('http://local.lo/api/auth/login', {
+                email: data.email,
+                password: data.password
+            });
+            if(response.data.token){
+                localStorage.setItem('token', response.data.token);
+                
+                const user = await $axios.get('/user/');
+                console.log(user);
+
+                $router.push('/user');
+
+            }
+        } catch (err) {
+            console.error(err);
+        }
+    }
+
+    async function registerHandler() {
+        try {
+            const response = await $axios.post('http://local.lo/api/auth/register', {
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                confirm_password: data.confirmPassword
+            });
+
+            localStorage.setItem('token', response.data.token);
+            $router.push('/user');
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     const togglePasswordVisibility = () => {

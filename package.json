@@ -21,6 +21,7 @@
     "@fortawesome/vue-fontawesome": "^3.0.3",
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/fontawesome": "^1.1.2",
+    "@nuxtjs/proxy": "^2.1.0",
     "@pinia/nuxt": "^0.4.11",
     "@tubular/util": "^4.13.1",
     "@vue/composition-api": "^1.7.1",

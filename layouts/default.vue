@@ -12,7 +12,7 @@
                 </div>
                 <div class="button">
                     <div class="tooltip">Profile</div>
-                    <font-awesome-icon class="iconButton" @click="$router.push('/login')" :icon="['fas', 'user']" />
+                    <font-awesome-icon class="iconButton" @click="profileHandler" :icon="['fas', 'user']" />
                 </div>
 
                 <div class="button">
@@ -30,6 +30,14 @@
 </template>
 
 <script setup>
+    const { $router } = useNuxtApp();
+    function profileHandler(){
+        if(localStorage.getItem('token')){
+            $router.push('/user');
+        }else{
+            $router.push('/login')
+        }
+    }
 </script>
 
 <style lang="css" scoped>

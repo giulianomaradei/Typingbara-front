@@ -25,12 +25,11 @@
 <script setup lang="ts">
 
     import { computed, reactive, onMounted, ref, watch } from 'vue';
-    import { useTypingStore } from '../../store/typing/typingStore'
+    import { useTypingStore } from '../../store/Typing/TypingStore'
     import { Word, Result } from 'types/typing/index'
     import Timer from './Timer.vue'
 
-    const store = useTypingStore();
-    const route = useRoute()
+    const typingStore = useTypingStore();
     const { $axios, $router } = useNuxtApp();
 
     const inputRef = ref<HTMLInputElement | null>(null); 
@@ -63,7 +62,7 @@
         const result = data.result;
         data.result.wordsPerMinute = Math.trunc(((result.wrongCharacters + result.correctCharacters)/5)/(result.time/60));
         data.result.accuracy = Math.trunc((100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters))
-        store.result = data.result;
+        typingStore.result = data.result;
         $router.push('/result')
     }
     
@@ -156,17 +155,18 @@
     }
 
     async function getRandomText() {
-        const text = (await $axios.get('https://random-word-api.vercel.app/api?words=200')).data;
-        const cleanedText = text
+        const response = (await $axios.get('https://random-word-api.vercel.app/api?words=200')).data;
+        
+        const cleanedText = response
             .join(" ")
             .replace(/\n/g, ' ')
             .replace(/[^a-zA-Z ]/g, '')
             .toLowerCase()
             .split(' ')
             .filter((word: string) => word.length <= 6)
-            .join(' ');
-
+            .join(' '); 
         await setData(cleanedText);
+        
     }
 
     async function setData( text: string ){

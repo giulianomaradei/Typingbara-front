@@ -25,6 +25,11 @@
     import { ref } from 'vue';
     import Chart from '../components/Profile/Chart.vue'
 
+    const { $axios } = useNuxtApp();
+    import { useUserStore } from '~/store/UserStore';
+
+    const userStore = useUserStore();
+
     const showPassword = ref(false);
     const chartData = {
         datasets: [{
@@ -94,6 +99,12 @@
     const togglePasswordVisibility = () => {
         showPassword.value = !showPassword.value;
     };
+
+    onMounted(async () =>{
+        if(userStore.user.id === null){
+            const response = await $axios.get('/user')
+        }
+    })
 </script>
 
 <style scoped lang="scss">

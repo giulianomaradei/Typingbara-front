@@ -26,10 +26,12 @@
 
     import { computed, reactive, onMounted, ref, watch } from 'vue';
     import { useTypingStore } from '../../store/Typing/TypingStore'
+    import { useUserStore } from '~/store/User/UserStore';
     import { Word, Result } from '~/types/Typing'
     import Timer from './Timer.vue'
 
     const typingStore = useTypingStore();
+    const userStore = useUserStore();
     const { $axios, $router } = useNuxtApp();
 
     const inputRef = ref<HTMLInputElement | null>(null); 
@@ -58,11 +60,12 @@
         isMobile: false,
     })
 
-    function finished(){
+    async function finished(){
         const result = data.result;
         data.result.wordsPerMinute = Math.trunc(((result.wrongCharacters + result.correctCharacters)/5)/(result.time/60));
         data.result.accuracy = Math.trunc((100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters))
         typingStore.result = data.result;
+        $axios.post('/user/result/'+userStore.user.id, data.result);
         $router.push('/result')
     }
     
@@ -264,10 +267,13 @@
         return data.lines.slice(data.lineIndex, data.lineIndex+3);
     })
 
-    onMounted(()=>{
+    onMounted(async ()=>{
         window.addEventListener("keydown", keydownHandler )
         inputRef.value = document.querySelector('#hidden-input');
         data.isMobile = window.innerWidth < 765
+        if(!userStore.user.id){
+            userStore.user = (await $axios.get('/user')).data.data;
+        }
         getRandomText();
     })
 

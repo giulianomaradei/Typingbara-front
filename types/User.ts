@@ -10,7 +10,7 @@ export interface User {
     id: number;
     name: string;
     email: string;
-    typingTestResults: TypingTestResult[];
+    typing_test_results: TypingTestResult[];
     analytics: {
         max_wpm: number;
         average_wpm: number;

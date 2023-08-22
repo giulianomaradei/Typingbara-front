@@ -62,7 +62,7 @@
             })).data;
             
             if(response.token){
-                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('token', response.token);
                 
                 const user = (await $axios.get('/user')).data.data;
                 userStore.user = user;

@@ -7,9 +7,12 @@ export default defineNuxtConfig({
     '@fortawesome/fontawesome-svg-core/styles.css'
   ],
   modules: [
-    // ...
     '@pinia/nuxt',
-  ]
+  ],
+  build:{
+    // vue-toastification - old commonjs module 
+    transpile: ['vue-toastification'],
+  }
 
 })
 

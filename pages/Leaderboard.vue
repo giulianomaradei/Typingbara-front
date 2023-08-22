@@ -21,7 +21,7 @@
                     {{ record.name }}
                 </div>
                 <div class="wpm">
-                    <span>{{ record.wpm }}</span>
+                    <span>{{ record.record }}</span>
                     <span class="wpm-unit"> wpm</span>
                 </div>
             </div>
@@ -30,16 +30,27 @@
 </template>
 
 <script setup lang="ts">
+    import { ref, onMounted } from 'vue';
 
-    const recorderList = [
-        { name: 'Eva', wpm: '140' },
-        { name: 'Giuliano', wpm: '124' },
-        { name: 'Sophia', wpm: '115' },
-        { name: 'Alice', wpm: '110' },
-        { name: 'Liam', wpm: '105' },
-        { name: 'Bob', wpm: '95' },
-        { name: 'Daniel', wpm: '85' },
-    ];
+
+    const { $axios } = useNuxtApp();
+
+
+    interface LeaderboardRecord {
+        name: string;
+        record: string; // You might want to use a more appropriate type for the record
+    }
+
+    const recorderList = ref<LeaderboardRecord[]>([]);
+
+    const fetchLeaderboard = async () => {
+        try {
+            const response = await $axios.get('/user/leaderboard');
+            recorderList.value = response.data.data;
+        } catch (error) {
+            console.error('Error fetching leaderboard data:', error);
+        }
+    };
 
     const getIcon = (index: number) => {
         if (index === 0) {
@@ -62,6 +73,11 @@
         }
         return ""; // Default class
     };
+
+
+    onMounted(() => {
+        fetchLeaderboard();
+    });
 
 </script>
 

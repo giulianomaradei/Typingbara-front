@@ -4,6 +4,10 @@
         <div class="user-container card">
             <img class="round-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png">
             <div class="username">{{user?.name}}</div>
+            <div @click="logout" class="button">
+                <div class="tooltip">Logout</div>
+                <font-awesome-icon class="iconButton logout" :icon="['fas', 'sign-out-alt']"/>
+        </div>
         </div>
         <div class="card statistcs-container">
             <div class="rank"><span><font-awesome-icon class="icon" icon="fa-solid fa-crown" /></span> 2nd place</div>
@@ -16,42 +20,60 @@
         </div>
         
         <chart class="chart" :chartData="chartData" :chartOptions="chartOptions"></chart>
-        
 
     </div>
 </template>
 
 <script setup lang="ts">
     import { ref } from 'vue';
-    import Chart from '../components/Profile/Chart.vue'
     import { useUserStore } from '~/store/User/UserStore';
+    import { format } from 'date-fns';
 
-    const { $axios } = useNuxtApp();
+    import Chart from '../components/Profile/Chart.vue'
 
+    const { $axios, $router } = useNuxtApp();
+    
     const userStore = useUserStore();
-
+    
     const showPassword = ref(false);
+    
+    const togglePasswordVisibility = () => {
+        showPassword.value = !showPassword.value;
+    };
 
+    const user = computed(()=>{
+        return userStore.user;
+    })
+
+    const logout = () => {
+        localStorage.removeItem('token'); 
+        $router.push('/');
+    };
     const chartData = computed(() => {
+        const currentUser = user.value;
+        const typing_test_results = currentUser?.typing_test_results;
+
+        console.log(typing_test_results);
+
         return {
+            labels: typing_test_results?.map(result => format(new Date(result.created_at), 'dd/MM/yyyy HH:mm:ss')),
             datasets: [
                 {
                     label: 'WPM',
-                    data: user.value?.typingTestResults.map(result => result.wpm),
-                    acc: user.value?.typingTestResults.map(result => result.accuracy), 
-                    time: user.value?.typingTestResults.map(result => result.duration_seconds), 
-                    fill: true,
+                    data: typing_test_results?.map(result => result.wpm),
+                    backgroundColor: 'rgba(255, 174, 0, 0.2)',
                     borderColor: 'rgb(255, 174, 0)',
                     borderWidth: 3,
                     pointRadius: 6,
                     tension: 0.1,
+                    acc: typing_test_results?.map(result => result.accuracy),
+                    time: typing_test_results?.map(result => result.duration_seconds),
                 }
             ],
-            labels: user.value?.typingTestResults.map(result => result.created_at), // Assuming you have a 'created_at' property
         };
     });
-        
 
+        
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -102,16 +124,9 @@
         }
     }
 
-    const togglePasswordVisibility = () => {
-        showPassword.value = !showPassword.value;
-    };
-
-    const user = computed(()=>{
-        return userStore.user;
-    })
 
     onMounted(async () =>{
-        if(!userStore.user){
+        if(!userStore.user.id){
             userStore.user = (await $axios.get('/user')).data.data;
         }
     })
@@ -135,6 +150,7 @@
         display: flex;
         justify-content:center;
         align-items: center;
+        position: relative;
         flex-grow: 1;
         margin: 0;
         gap: 20px;
@@ -185,6 +201,15 @@
         }
     }
 
+    .button{
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: auto;
+        .logout{
+            color: red;
+        }
+    }
     .chart{
         width: 100%;
         height: 30vh;

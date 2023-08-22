@@ -22,15 +22,18 @@
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/fontawesome": "^1.1.2",
     "@nuxtjs/proxy": "^2.1.0",
+    "@nuxtjs/toast": "^3.3.1",
     "@pinia/nuxt": "^0.4.11",
     "@tubular/util": "^4.13.1",
     "@vue/composition-api": "^1.7.1",
     "axios": "^1.4.0",
     "chart.js": "^4.3.3",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^2.30.0",
     "font-awesome": "^4.7.0",
     "pinia": "^2.1.4",
-    "vue-chartjs": "^5.2.0"
+    "vue-chartjs": "^5.2.0",
+    "vue-toastification": "^2.0.0-rc.5"
   },
   "overrides": {
     "vue": "latest"

@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Word, Result } from 'types/typing/index'
+import { Word, Result } from 'types/Typing'
 
 export const useTypingStore = defineStore('counter', {
     state: () => ({

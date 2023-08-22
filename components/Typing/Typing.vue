@@ -26,7 +26,7 @@
 
     import { computed, reactive, onMounted, ref, watch } from 'vue';
     import { useTypingStore } from '../../store/Typing/TypingStore'
-    import { Word, Result } from 'types/typing/index'
+    import { Word, Result } from '~/types/Typing'
     import Timer from './Timer.vue'
 
     const typingStore = useTypingStore();

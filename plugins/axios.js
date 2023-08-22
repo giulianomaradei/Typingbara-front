@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const defaultUrl = "https://local.lo/api";
+  const defaultUrl = "http://local.lo/api";
 
   let api = axios.create({
     baseUrl: defaultUrl,
@@ -13,9 +13,17 @@ export default defineNuxtPlugin((nuxtApp) => {
   api.interceptors.request.use(
     (config) => {
       const token = localStorage.getItem("token");
-      if ( token && !config.url.startsWith("/auth") && !config.url.startsWith("https://random-word-api.vercel.app")) {
-        config.headers.common["Authorization"] = `Bearer ${token}`;
+
+      if (token && !config.url.startsWith("/auth") && !config.url.startsWith("https://random-word-api.vercel.app")) {
+        console.log(config.url, token);
+        config.headers = config.headers || {}; // Certifique-se de criar o objeto headers se não existir
+        config.headers["Authorization"] = `Bearer ${token}`;
       }
+
+      if(!config.url.startsWith('https://')){
+        config.url = defaultUrl + config.url;
+      }
+
       return config;
     },
     (error) => {

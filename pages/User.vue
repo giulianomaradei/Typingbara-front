@@ -3,15 +3,15 @@
 
         <div class="user-container card">
             <img class="round-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png">
-            <div class="username">Giuliano</div>
+            <div class="username">{{user?.name}}</div>
         </div>
         <div class="card statistcs-container">
             <div class="rank"><span><font-awesome-icon class="icon" icon="fa-solid fa-crown" /></span> 2nd place</div>
             <div class="statistcs">
-                <div><span>MAX WPM:</span> 124</div>
-                <div><span>AVG WPM:</span> 112</div>
-                <div><span>AVG ACC:</span> 87%</div>
-                <div><span>TOTAL TESTS:</span> 34</div>
+                <div><span>MAX WPM:</span> {{ user?.analytics.max_wpm }}</div>
+                <div><span>AVG WPM:</span> {{ user?.analytics.average_wpm }}</div>
+                <div><span>AVG ACC:</span> {{ user?.analytics.average_accuracy }}%</div>
+                <div><span>TOTAL TESTS:</span> {{ user?.analytics.number_of_tests }}</div>
             </div>
         </div>
         
@@ -24,27 +24,33 @@
 <script setup lang="ts">
     import { ref } from 'vue';
     import Chart from '../components/Profile/Chart.vue'
+    import { useUserStore } from '~/store/User/UserStore';
 
     const { $axios } = useNuxtApp();
-    import { useUserStore } from '~/store/UserStore';
 
     const userStore = useUserStore();
 
     const showPassword = ref(false);
-    const chartData = {
-        datasets: [{
-            label: "WPM",
-            data: [120, 140, 98, 89],
-            acc: [80, 92, 75, 88],
-            time: [30, 30, 15, 60],
-            fill: true,
-            borderColor: 'rgb(255, 174, 0)',
-            borderWidth: 3,
-            pointRadius: 6,
-            tension: 0.1,
-        }],
-        labels: ["2023-02-13", "2023-02-14", "2023-02-15", "2023-02-16"]
-    };
+
+    const chartData = computed(() => {
+        return {
+            datasets: [
+                {
+                    label: 'WPM',
+                    data: user.value?.typingTestResults.map(result => result.wpm),
+                    acc: user.value?.typingTestResults.map(result => result.accuracy), 
+                    time: user.value?.typingTestResults.map(result => result.duration_seconds), 
+                    fill: true,
+                    borderColor: 'rgb(255, 174, 0)',
+                    borderWidth: 3,
+                    pointRadius: 6,
+                    tension: 0.1,
+                }
+            ],
+            labels: user.value?.typingTestResults.map(result => result.created_at), // Assuming you have a 'created_at' property
+        };
+    });
+        
 
     const chartOptions = {
         responsive: true,
@@ -100,9 +106,13 @@
         showPassword.value = !showPassword.value;
     };
 
+    const user = computed(()=>{
+        return userStore.user;
+    })
+
     onMounted(async () =>{
-        if(userStore.user.id === null){
-            const response = await $axios.get('/user')
+        if(!userStore.user){
+            userStore.user = (await $axios.get('/user')).data.data;
         }
     })
 </script>

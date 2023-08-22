@@ -33,10 +33,10 @@
 <script setup lang="ts">
 
     import { ref } from 'vue';
-    import { useTypingStore } from '~/store/Typing/TypingStore';
+    import { useUserStore } from '~/store/User/UserStore';
     const { $router, $axios } = useNuxtApp();
     
-    const typingStore = useTypingStore();
+    const userStore = useUserStore();
     const showPassword = ref(false);
 
     const data = reactive({
@@ -56,18 +56,18 @@
 
     async function loginHandler() {
         try {
-            const response = await $axios.post('http://local.lo/api/auth/login', {
+            const response = (await $axios.post('/auth/login', {
                 email: data.email,
                 password: data.password
-            });
-            if(response.data.token){
+            })).data;
+            
+            if(response.token){
                 localStorage.setItem('token', response.data.token);
                 
-                const user = await $axios.get('/user/');
-                console.log(user);
-
+                const user = (await $axios.get('/user')).data.data;
+                userStore.user = user;
+                
                 $router.push('/user');
-
             }
         } catch (err) {
             console.error(err);

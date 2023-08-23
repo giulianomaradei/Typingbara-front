@@ -51,6 +51,12 @@ body {
     width: 25px;
 }
 
+@keyframes is-rotating {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
 .card {
     background: #565656;
     border-radius: 8px;

@@ -1,6 +1,6 @@
 export interface TypingTestResult {
     user_id: number;
-    wpm: number;
+    words_per_minute: number;
     accuracy: number;
     duration_seconds: number;
     created_at: string

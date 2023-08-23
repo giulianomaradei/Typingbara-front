@@ -25,6 +25,9 @@
                     <span class="wpm-unit"> wpm</span>
                 </div>
             </div>
+            <div v-if="(recorderList.length === 0)"  class="c-loader-container">
+                <div class="c-loader"></div>
+            </div>
         </div>
     </div>
 </template>
@@ -86,10 +89,18 @@
     .card{
         min-height: 60vh;
         width: 40rem;
+        position: relative;
     }
 
     .card-content{
         height: 100%;
+    }
+
+    .c-loader-container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
     }
 
    .row {

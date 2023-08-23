@@ -60,7 +60,7 @@
             datasets: [
                 {
                     label: 'WPM',
-                    data: typing_test_results?.map(result => result.wpm),
+                    data: typing_test_results?.map(result => result.words_per_minute),
                     backgroundColor: 'rgba(255, 174, 0, 0.2)',
                     borderColor: 'rgb(255, 174, 0)',
                     borderWidth: 3,

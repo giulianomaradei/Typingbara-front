@@ -76,15 +76,21 @@
 
     async function registerHandler() {
         try {
-            const response = await $axios.post('http://local.lo/api/auth/register', {
+            const response = (await $axios.post('/auth/register', {
                 name: data.name,
                 email: data.email,
                 password: data.password,
                 confirm_password: data.confirmPassword
-            });
+            })).data;
 
-            localStorage.setItem('token', response.data.token);
-            $router.push('/user');
+            if(response.token){
+                localStorage.setItem('token', response.token);
+                
+                const user = (await $axios.get('/user')).data.data;
+                userStore.user = user;
+                
+                $router.push('/user');
+            }
         } catch (err) {
             console.error(err);
         }

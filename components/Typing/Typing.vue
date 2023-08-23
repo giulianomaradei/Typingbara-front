@@ -65,7 +65,14 @@
         data.result.wordsPerMinute = Math.trunc(((result.wrongCharacters + result.correctCharacters)/5)/(result.time/60));
         data.result.accuracy = Math.trunc((100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters))
         typingStore.result = data.result;
-        $axios.post('/user/result/'+userStore.user.id, data.result);
+
+        const resultFormated = {
+            user_id: userStore.user.id,
+            words_per_minute: data.result.wordsPerMinute,
+            accuracy: data.result.accuracy,
+            duration_seconds: data.result.time,
+        }
+        $axios.post( '/user/result/' + userStore.user.id, resultFormated );
         $router.push('/result')
     }
     

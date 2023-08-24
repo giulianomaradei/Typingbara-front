@@ -66,13 +66,14 @@
         data.result.accuracy = Math.trunc((100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters))
         typingStore.result = data.result;
 
-        const resultFormated = {
+        const formatedResult = {
             user_id: userStore.user.id,
             words_per_minute: data.result.wordsPerMinute,
             accuracy: data.result.accuracy,
             duration_seconds: data.result.time,
         }
-        $axios.post( '/user/result/' + userStore.user.id, resultFormated );
+        const response = await $axios.post( `/user/result/${userStore.user.id}`, formatedResult );
+        userStore.user.typing_test_results.push(response.data.data);
         $router.push('/result')
     }
     
@@ -100,8 +101,6 @@
 
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
-        
-        console.log(key);
         
         if(regex.test(key)){ // if its a normal text letter
             data.capslock = /^[A-Z]$/.test(key)
@@ -174,9 +173,9 @@
             .toLowerCase()
             .split(' ')
             .filter((word: string) => word.length <= 6)
-            .join(' '); 
+            .join(' ');
+
         await setData(cleanedText);
-        
     }
 
     async function setData( text: string ){
@@ -274,14 +273,18 @@
         return data.lines.slice(data.lineIndex, data.lineIndex+3);
     })
 
-    onMounted(async ()=>{
+    function setTypingLogic(){
         window.addEventListener("keydown", keydownHandler )
         inputRef.value = document.querySelector('#hidden-input');
         data.isMobile = window.innerWidth < 765
+    }
+
+    onMounted(async ()=>{
+        setTypingLogic();
+        getRandomText();
         if(!userStore.user.id){
             userStore.user = (await $axios.get('/user')).data.data;
         }
-        getRandomText();
     })
 
     onUnmounted(()=>{

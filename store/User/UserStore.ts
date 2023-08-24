@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 export const useUserStore = defineStore('user', {
   state: () => ({
     user: {
-      id: 0,
+      id: null,
       name: '',
       email: '',
       typing_test_results: [] as TypingTestResult[],
@@ -13,6 +13,7 @@ export const useUserStore = defineStore('user', {
         average_wpm: 0,
         average_accuracy: 0,
         number_of_tests: 0,
+        position: 0,
       },
     } as User,
   }),

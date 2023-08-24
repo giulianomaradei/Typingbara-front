@@ -7,7 +7,7 @@ export interface TypingTestResult {
 }
 
 export interface User {
-    id: number;
+    id: number | null;
     name: string;
     email: string;
     typing_test_results: TypingTestResult[];
@@ -16,5 +16,6 @@ export interface User {
         average_wpm: number;
         average_accuracy: number;
         number_of_tests: number;
+        position: number;
     };
 }

@@ -2,25 +2,31 @@
     <div class="profile-container">
 
         <div class="user-container card">
-            <img class="round-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png">
-            <div class="username">{{user?.name}}</div>
-            <div @click="logout" class="button">
-                <div class="tooltip">Logout</div>
-                <font-awesome-icon class="iconButton logout" :icon="['fas', 'sign-out-alt']"/>
-        </div>
-        </div>
-        <div class="card statistcs-container">
-            <div class="rank"><span><font-awesome-icon class="icon" icon="fa-solid fa-crown" /></span> 2nd place</div>
-            <div class="statistcs">
-                <div><span>MAX WPM:</span> {{ user?.analytics.max_wpm }}</div>
-                <div><span>AVG WPM:</span> {{ user?.analytics.average_wpm }}</div>
-                <div><span>AVG ACC:</span> {{ user?.analytics.average_accuracy }}%</div>
-                <div><span>TOTAL TESTS:</span> {{ user?.analytics.number_of_tests }}</div>
+            <template v-if="user.id">
+                <img class="round-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png">
+                <div class="username">{{user?.name}}</div>
+                <div @click="logout" class="button">
+                    <div class="tooltip">Logout</div>
+                    <font-awesome-icon class="iconButton logout" :icon="['fas', 'sign-out-alt']"/>
+                </div>
+            </template>
+            <div v-else class="c-loader">
+
             </div>
         </div>
-        
+        <div class="card statistcs-container">
+            <template v-if="user.id">
+                <div class="rank"><span><font-awesome-icon class="icon" icon="fa-solid fa-crown" /></span> {{user?.analytics.position}}nd place</div>
+                <div class="statistcs">
+                    <div><span>MAX WPM:</span> {{ user?.analytics.max_wpm ?? 0 }}</div>
+                    <div><span>AVG WPM:</span> {{ user?.analytics.average_wpm ?? 0 }}</div>
+                    <div><span>AVG ACC:</span> {{ user?.analytics.average_accuracy ?? 0 }}%</div>
+                    <div><span>TOTAL TESTS:</span> {{ user?.analytics.number_of_tests ?? 0 }}</div>
+                </div>
+            </template>
+            <div v-else class="c-loader"></div>
+        </div>
         <chart class="chart" :chartData="chartData" :chartOptions="chartOptions"></chart>
-
     </div>
 </template>
 
@@ -126,9 +132,7 @@
 
 
     onMounted(async () =>{
-        if(!userStore.user.id){
-            userStore.user = (await $axios.get('/user')).data.data;
-        }
+        userStore.user = (await $axios.get('/user')).data.data;
     })
 </script>
 

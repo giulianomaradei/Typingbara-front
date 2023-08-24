@@ -72,8 +72,7 @@
             accuracy: data.result.accuracy,
             duration_seconds: data.result.time,
         }
-        const response = await $axios.post( `/user/result/${userStore.user.id}`, formatedResult );
-        userStore.user.typing_test_results.push(response.data.data);
+        $axios.post( `/user/result/${userStore.user.id}`, formatedResult );
         $router.push('/result')
     }
     

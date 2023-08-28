@@ -17,7 +17,8 @@
 
                 <input v-if="data.view === 'Register'" v-model="data.password" :type="'password'" placeholder="Password">
                 <input v-if="data.view === 'Register'" v-model="data.confirmPassword" :type="'password'" placeholder="Confirm Password">
-
+                
+                <div v-if="data.error" class="error">{{ data.error }}</div>
 
                 <div class="buttons">
                     <button @click.prevent="loginHandler" v-if="data.view === 'Login'" class="submit-btn">Login</button>
@@ -32,7 +33,8 @@
 
 <script setup lang="ts">
 
-    import { ref } from 'vue';
+    import { AnyARecord } from 'dns';
+import { ref } from 'vue';
     import { useUserStore } from '~/store/User/UserStore';
     const { $router, $axios } = useNuxtApp();
     
@@ -45,6 +47,7 @@
         email: "",
         password: "",
         confirmPassword: "",
+        error: ""
     });
 
     function changeView(){
@@ -52,6 +55,13 @@
         data.email = "";
         data.password = "";
         data.confirmPassword = ""
+    }
+
+    function setErrorText(error : string){
+        data.error = error;
+        setTimeout(()=>{
+            data.error = "";
+        },1300);
     }
 
     async function loginHandler() {
@@ -69,9 +79,10 @@
                 
                 $router.push('/user');
             }
-        } catch (err) {
-            console.error(err);
+        } catch (err: any) {
+            setErrorText(err.response.data.message);
         }
+        
     }
 
     async function registerHandler() {
@@ -91,8 +102,8 @@
                 
                 $router.push('/user');
             }
-        } catch (err) {
-            console.error(err);
+        } catch (err: any) {
+            setErrorText(err.response.data.message);
         }
     }
 
@@ -170,6 +181,11 @@
         background-image: url('../assets/images/google-icon.png');
         background-size: cover;
         background-position: center;
+    }
+
+    .error{
+        align-self: center;
+        color: rgb(255, 0, 0);
     }
 
 </style>

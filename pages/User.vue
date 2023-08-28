@@ -16,7 +16,7 @@
         </div>
         <div class="card statistcs-container">
             <template v-if="user.id">
-                <div class="rank"><span><font-awesome-icon class="icon" icon="fa-solid fa-crown" /></span> {{user?.analytics.position}}nd place</div>
+                <div class="rank"><span><font-awesome-icon class="icon" icon="fa-solid fa-crown" /></span> {{user?.analytics.position}}</div>
                 <div class="statistcs">
                     <div><span>MAX WPM:</span> {{ user?.analytics.max_wpm ?? 0 }}</div>
                     <div><span>AVG WPM:</span> {{ user?.analytics.average_wpm ?? 0 }}</div>

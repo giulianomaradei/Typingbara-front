@@ -25,8 +25,11 @@
                     <span class="wpm-unit"> wpm</span>
                 </div>
             </div>
-            <div v-if="(recorderList.length === 0)"  class="c-loader-container">
+            <div v-if="(recorderList === null)"  class="c-loader-container">
                 <div class="c-loader"></div>
+            </div>
+            <div v-if="(recorderList?.length === 0)"  class="c-loader-container">
+                <div >No records yet</div>
             </div>
         </div>
     </div>
@@ -44,7 +47,7 @@
         record: string; // You might want to use a more appropriate type for the record
     }
 
-    const recorderList = ref<LeaderboardRecord[]>([]);
+    const recorderList = ref<LeaderboardRecord[] | null>(null);
 
     const fetchLeaderboard = async () => {
         try {

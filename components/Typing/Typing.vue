@@ -62,7 +62,7 @@
 
     async function finished(){
         const result = data.result;
-        data.result.wordsPerMinute = Math.trunc(((result.wrongCharacters + result.correctCharacters)/5)/(result.time/60));
+        data.result.wordsPerMinute = Math.max(0,Math.trunc((((result.wrongCharacters + result.correctCharacters)/5) - result.wrongCharacters )/(result.time/60)));
         data.result.accuracy = Math.trunc((100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters))
         typingStore.result = data.result;
 

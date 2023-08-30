@@ -3,8 +3,14 @@ import axios from "axios";
 export default defineNuxtPlugin((nuxtApp) => {
   const defaultUrl = "http://local.lo/api";
 
+  // Obtém a variável de ambiente da URL de produção do Vercel
+  const productionUrl = process.env.API_URL_PRODUCTION;
+
+  // Escolhe a URL com base no ambiente
+  const apiUrl = process.env.NODE_ENV === 'production' ? productionUrl : defaultUrl;
+
   let api = axios.create({
-    baseUrl: defaultUrl,
+    baseUrl: apiUrl,
     headers: {
       common: {},
     },

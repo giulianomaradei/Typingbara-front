@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const apiUrl = process.env.API_URL_PRODUCTION || "http://local.lo/api";
+  const apiUrl = process.env.API_URL;
 
   let api = axios.create({
     baseUrl: apiUrl,

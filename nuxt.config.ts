@@ -12,7 +12,12 @@ export default defineNuxtConfig({
   build:{
     // vue-toastification - old commonjs module 
     transpile: ['vue-toastification'],
-  }
+  },
+  runtimeConfig: {
+    public: {
+      API_URL: process.env.API_URL,
+    },
+  },
 
 })
 

@@ -21,7 +21,7 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
 
       if(!config.url.startsWith('https://')){
-        config.url = defaultUrl + config.url;
+        config.url = apiUrl  + config.url;
       }
 
       return config;

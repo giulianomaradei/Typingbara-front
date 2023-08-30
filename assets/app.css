@@ -11,10 +11,11 @@ body {
     padding: 13px;
     font-size: clamp(1rem, 0.953rem + 0.2892vw, 1.3rem);
     border-radius: 15px;
-    &:hover{
-        background-color: #3b3b3b;
-        transition: .3s;
-    }
+}
+
+.iconButton:hover{
+    background-color: #3b3b3b;
+    transition: .3s;
 }
 
 .button {
@@ -23,23 +24,23 @@ body {
     justify-content: center;
     position: relative;
     width: clamp(2rem, 1.5301rem + 2.8916vw, 5rem);
+}
 
-    .tooltip {
-        position: absolute;
-        bottom: -35px;
-        padding: 4px 6px;
-        background-color: rgba(0, 0, 0, 0.8);
-        color: #fff;
-        text-align: center;
-        border-radius: 5px;
-        opacity: 0;
-        transition: opacity 0.3s;
-    }
+.tooltip {
+    position: absolute;
+    bottom: -35px;
+    padding: 4px 6px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
 
-    &:hover .tooltip {
-        opacity: 1;
+.button:hover .tooltip {
+    opacity: 1;
 
-    }
 }
 
 .c-loader {

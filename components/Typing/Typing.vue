@@ -161,8 +161,19 @@
             }
         }
     }
+    
+    function resetResults(){
+        data.result = {
+            wordsPerMinute: 0,
+            accuracy: 0,
+            time: 30,
+            correctCharacters: 0,
+            wrongCharacters: 0,
+        }
+    }
 
     async function getRandomText() {
+        resetResults();
         const response = (await $axios.get('https://random-word-api.vercel.app/api?words=200')).data;
         
         const cleanedText = response

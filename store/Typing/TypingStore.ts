@@ -9,7 +9,6 @@ export const useTypingStore = defineStore('counter', {
         time: 30,
         correctCharacters: 0,
         wrongCharacters: 0,
-        totalKeysPressed:0
       } as Result,
     }),
     getters: {

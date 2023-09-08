@@ -13,3 +13,9 @@ export interface Word {
     index: number
     lettersLeft: number
 }
+
+export interface Player {
+    name: string,
+    progress: number,
+    wordsPerMinute: number,   
+}

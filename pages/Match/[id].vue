@@ -23,6 +23,8 @@
 
     import { Player } from '~/types/Typing'
     const { $echo, $axios } = useNuxtApp()
+    const route = useRoute();
+
     const data = reactive({
         players: [] as Player[],
         text: "",
@@ -72,6 +74,8 @@
 
         data.gameId = (await $axios.post('/game')).data.data.game_id;
 
+        const responseData = (await $axios.post(`game/connect/${route.params.id}`)).data.data;
+        data.players = responseData.players
         
     })
 

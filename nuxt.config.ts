@@ -8,6 +8,8 @@ export default defineNuxtConfig({
   ],
   modules: [
     '@pinia/nuxt',
+  ],plugins: [
+    { src: '~/plugins/socket.js', mode: 'client' }
   ],
   build:{
     // vue-toastification - old commonjs module 

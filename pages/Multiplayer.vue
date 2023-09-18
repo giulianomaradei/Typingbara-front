@@ -1,5 +1,14 @@
 <template>
     <div class="match-container">
+        <div class="typing-wraper">
+            <div class="countdow"></div>
+            <Typing 
+                @wronCharacter="handleWrongCharacter" 
+                @correctCharacter="handleCorrectCharacter" 
+                :amountOfWords="25"
+            >
+            </Typing>
+        </div>
         <div v-for="(player, index) in data.players" class="player-container">
             <div class="capy-container">
                 <div class="player-name">{{player.name}}</div>
@@ -12,11 +21,12 @@
 
 <script setup lang="ts">
 
-import { Player } from '~/types/Typing'
-
+    import { Player } from '~/types/Typing'
+    const { $echo, $axios } = useNuxtApp()
     const data = reactive({
         players: [] as Player[],
-        text: ""
+        text: "",
+        gameId: ""
     })
 
     function getPlayerPadding(index: number){
@@ -24,8 +34,16 @@ import { Player } from '~/types/Typing'
             "padding-left": `${data.players[index].progress}px`
         }    
     }
+
+    function handleCorrectCharacter(amount : number){
+        
+    }
+
+    function handleWrongCharacter(amount : number){
+        
+    }
     
-    onMounted(()=>{
+    onMounted(async ()=>{
         data.players.push({
             name: "You",
             progress: 0,
@@ -46,13 +64,25 @@ import { Player } from '~/types/Typing'
             progress: 0,
             wordsPerMinute: 0
         })
+
+        
+        $echo.channel('match').listen('teste', (e: any) => {
+            console.log(e)
+        });
+
+        data.gameId = (await $axios.post('/game')).data.data.game_id;
+
+        
     })
 
 </script>
 
 <style scoped>
     .match-container{
-        width: 60rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         max-width: 90vw;
 
     }
@@ -63,6 +93,7 @@ import { Player } from '~/types/Typing'
         position: relative;
         width: 100%;
         margin: 1rem 0;
+        width: 45rem;
     }
 
     .capy-container{

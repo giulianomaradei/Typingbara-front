@@ -1,7 +1,5 @@
 <template>
     <div class="typing-container">
-
-        <Timer v-if="data.started" :callback="finished"></Timer>
         <div class="capslockWarning" v-if="data.capslock">Capslock</div>
         <input v-if="data.isMobile" v-model="data.hiddenInputValue" ref="inputRef" id="hidden-input" type="text" style="position: absolute; opacity: 0">
         <div @click="openMobileKeyboard" id="text-container">
@@ -12,12 +10,7 @@
                 </span>
             </div>
         </div>
-
         <div v-if="!data.text" class="c-loader"></div>
-        <div class="button">
-            <div class="tooltip">New Text</div>
-            <font-awesome-icon class="iconButton" @click="getRandomText" icon="fa-solid fa-rotate" />
-        </div>
     </div>
 
 </template>
@@ -25,16 +18,26 @@
 <script setup lang="ts">
 
     import { computed, reactive, onMounted, ref, watch } from 'vue';
-    import { useTypingStore } from '../../store/Typing/TypingStore'
-    import { useUserStore } from '~/store/User/UserStore';
-    import { Word, Result } from '~/types/Typing'
-    import Timer from './Timer.vue'
+    import { Word } from '~/types/Typing'
 
-    const typingStore = useTypingStore();
-    const userStore = useUserStore();
     const { $axios, $router } = useNuxtApp();
 
     const inputRef = ref<HTMLInputElement | null>(null); 
+
+    const props = defineProps({
+        amountOfLines: Number,
+        amountOfWords: Number,
+        started:{
+            type: Boolean,
+            default: true
+        }
+    });
+
+    defineExpose({
+        getRandomText,
+    })
+
+    const emit = defineEmits(['correctCharacter', 'wrongCharacter', 'start'])
     
     const data = reactive({
         text: "",
@@ -47,34 +50,9 @@
         lines: [] as string[],
         absoluteLetterIndexes: [] as number[][],
 
-        started: false,
-        result: {
-            wordsPerMinute: 0,
-            accuracy: 0,
-            time: 30,
-            correctCharacters: 0,
-            wrongCharacters: 0,
-        } as Result,
-
         hiddenInputValue: "",
         isMobile: false,
     })
-
-    async function finished(){
-        const result = data.result;
-        data.result.wordsPerMinute = Math.max(0,Math.trunc((((result.wrongCharacters + result.correctCharacters)/5) - result.wrongCharacters )/(result.time/60)));
-        data.result.accuracy = Math.trunc((100 * result.correctCharacters) / (result.wrongCharacters + result.correctCharacters))
-        typingStore.result = data.result;
-
-        const formatedResult = {
-            user_id: userStore.user.id,
-            words_per_minute: data.result.wordsPerMinute,
-            accuracy: data.result.accuracy,
-            duration_seconds: data.result.time,
-        }
-        $axios.post( `/user/result/${userStore.user.id}`, formatedResult );
-        $router.push('/result')
-    }
     
     function openMobileKeyboard() {
         if (inputRef.value) {
@@ -94,8 +72,12 @@
         keyPressed( event.key )
     }
 
-    function keyPressed( key: string ){
+    function keyPressed(  key: string ){
         
+        if(!props.started){
+            return;
+        }
+
         const regex = /^[a-zA-Z'.,:?!;()-]$/;
 
         const currentWord = data.words[data.wordIndex];
@@ -103,21 +85,17 @@
         
         if(regex.test(key)){ // if its a normal text letter
             data.capslock = /^[A-Z]$/.test(key)
-            
-            if(!data.started){
-                data.started = true;
-            }
 
-            if(key === data.text[data.letterIndex]){  // if its the right letter
+            if(key === data.text![data.letterIndex]){  // if its the right letter
                 data.colors[data.letterIndex] = 'white'
-                data.words[data.wordIndex].lettersLeft--;
-                data.result.correctCharacters++;
-                if(data.letterIndex === data.absoluteLetterIndexes[data.lineIndex+1][data.absoluteLetterIndexes[data.lineIndex+1].length-2]){ // if the letter is the last from the second line (-2 because there is always a empty space in the end)
+                data.words[data.wordIndex].lettersLeft--;                                                                                                                                                                                                                       
+                emit('correctCharacter', 1);
+                if(props.amountOfLines && data.letterIndex === data.absoluteLetterIndexes[data.lineIndex+1][data.absoluteLetterIndexes[data.lineIndex+1].length-2]){ // if the letter is the last from the second line (-2 because there is always a empty space in the end)
                     data.lineIndex++;
                 }
             }else{
                 data.colors[data.letterIndex] = 'red';
-                data.result.wrongCharacters++;
+                emit('wrongCharacter', 1);
             }
             data.words[data.wordIndex].lastWritedIndex = data.letterIndex +1;
             data.letterIndex+=1;
@@ -141,9 +119,9 @@
                     if(data.colors[data.letterIndex] === "white"){ // if i'm deleting a already correct letter there will be one more letter left
                         data.words[data.wordIndex].lettersLeft++;
                         data.words[data.wordIndex].lastWritedIndex--;
-                        data.result.correctCharacters--;
+                        emit('correctCharacter', -1);
                     }else if(data.colors[data.letterIndex] === 'red'){
-                        data.result.wrongCharacters--;
+                        emit('wrongCharacter', -1);
                     }
                     data.colors[data.letterIndex] = "gray";
                 }
@@ -157,25 +135,13 @@
             if(key === ' ' && currentWord.start !== data.letterIndex){
                 data.letterIndex = data.words[data.wordIndex + 1].start
                 data.wordIndex++;
-                data.result.correctCharacters++;
+                emit('correctCharacter', 1);
             }
-        }
-    }
-    
-    function resetResults(){
-        data.result = {
-            wordsPerMinute: 0,
-            accuracy: 0,
-            time: 30,
-            correctCharacters: 0,
-            wrongCharacters: 0,
         }
     }
 
     async function getRandomText() {
-        resetResults();
-        const response = (await $axios.get('https://random-word-api.vercel.app/api?words=200')).data;
-        
+        const response = (await $axios.get(`https://random-word-api.vercel.app/api?words=200`)).data;
         const cleanedText = response
             .join(" ")
             .replace(/\n/g, ' ')
@@ -183,8 +149,10 @@
             .toLowerCase()
             .split(' ')
             .filter((word: string) => word.length <= 6)
+            .slice(0, props.amountOfWords ? props.amountOfWords+1 : 200)
             .join(' ');
 
+        emit('start', cleanedText);
         await setData(cleanedText);
     }
 
@@ -197,7 +165,6 @@
         data.wordIndex = 0,
         data.lineIndex = 0,
         data.absoluteLetterIndexes = [] as number[][];
-        data.started = false;
 
         for (var i = 0; i < text.length; i++) {
           if(text[i] !== ' '){
@@ -216,7 +183,7 @@
           }
         }
         data.words = newWords;
-        data.text = text
+        data.text = text;
         data.lines = await divideTextInLines();
         data.colors = (new Array(data.text.length).fill('gray'))
     }
@@ -260,7 +227,6 @@
             data.absoluteLetterIndexes.push(lineAbsoluteIndexes);
         }
 
-        
         return lines;
     }
 
@@ -280,7 +246,11 @@
     }
  
     const displayedLines = computed(()=>{
-        return data.lines.slice(data.lineIndex, data.lineIndex+3);
+        if(props.amountOfLines){
+            return data.lines.slice(data.lineIndex, data.lineIndex+props.amountOfLines);
+        }else{
+            return data.lines;
+        }
     })
 
     function setTypingLogic(){
@@ -289,16 +259,13 @@
         data.isMobile = window.innerWidth < 765
     }
 
-    onMounted(async ()=>{
-        setTypingLogic();
-        getRandomText();
-        if(!userStore.user.id){
-            userStore.user = (await $axios.get('/user')).data.data;
-        }
-    })
-
     onUnmounted(()=>{
         window.removeEventListener("keydown", keydownHandler)
+    })
+
+    onMounted(()=>{
+        getRandomText();
+        setTypingLogic();
     })
 
 </script>
@@ -339,9 +306,9 @@
     }
     .typing-container{
         position: relative;
-        width: 80rem;
+        width: 65rem;
         height: 20rem;
-        max-width: 90%;
+        max-width: 90vw;
         display: flex;
         flex-direction: column;
         gap: 2rem;

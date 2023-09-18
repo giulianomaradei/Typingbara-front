@@ -53,6 +53,7 @@
 
     const logout = () => {
         localStorage.removeItem('token'); 
+        userStore.user.id = null;
         $router.push('/');
     };
     const chartData = computed(() => {

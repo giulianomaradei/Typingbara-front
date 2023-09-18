@@ -31,7 +31,10 @@
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^2.30.0",
     "font-awesome": "^4.7.0",
+    "laravel-echo": "^1.15.3",
+    "nuxt-socket-io": "^3.0.13",
     "pinia": "^2.1.4",
+    "pusher-js": "^8.3.0",
     "vue-chartjs": "^5.2.0",
     "vue-toastification": "^2.0.0-rc.5"
   },

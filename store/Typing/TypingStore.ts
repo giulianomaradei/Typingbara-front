@@ -11,10 +11,4 @@ export const useTypingStore = defineStore('counter', {
         wrongCharacters: 0,
       } as Result,
     }),
-    getters: {
-        
-    },
-    actions: {
-
-    },
   })

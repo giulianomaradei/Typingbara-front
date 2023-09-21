@@ -33,8 +33,7 @@
 
 <script setup lang="ts">
 
-    import { AnyARecord } from 'dns';
-import { ref } from 'vue';
+    import { ref } from 'vue';
     import { useUserStore } from '~/store/User/UserStore';
     const { $router, $axios } = useNuxtApp();
     

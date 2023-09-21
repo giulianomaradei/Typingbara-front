@@ -8,7 +8,7 @@
             <div class="options">
                 <div class="button">
                     <div class="tooltip">Mystery</div>
-                    <font-awesome-icon class="iconButton multiplayer-icon" :icon="['fas', 'gamepad']" />
+                    <font-awesome-icon class="iconButton multiplayer-icon"  @click="multiplayerHandler" :icon="['fas', 'gamepad']" />
                 </div>
                 <div class="button">
                     <div class="tooltip">Profile</div>
@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-    const { $router } = useNuxtApp();
+    const { $router, $axios } = useNuxtApp();
     function profileHandler(){
         if(localStorage.getItem('token')){
             $router.push('/user');
@@ -38,6 +38,13 @@
             $router.push('/login')
         }
     }
+
+    async function multiplayerHandler(){
+        const gameId = (await $axios.post('/game')).data.data.game_id;
+        $router.push(`/match/${gameId}`);
+    }
+
+
 </script>
 
 <style lang="css" scoped>

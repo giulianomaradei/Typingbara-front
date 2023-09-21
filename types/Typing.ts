@@ -15,6 +15,7 @@ export interface Word {
 }
 
 export interface Player {
+    id: number,
     name: string,
     progress: number,
     wordsPerMinute: number,   

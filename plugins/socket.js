@@ -16,7 +16,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     disableStats: true,
     cluster: 'mt1',
     enabledTransports: ['ws', 'wss'],
-    authEndpoint: 'https://typingbara-fa53f7433fea.herokuapp.com/auth',
+    authEndpoint: 'https://typingbara-fa53f7433fea.herokuapp.com/broadcasting/auth',
     auth:        {
       headers: {
           Authorization: 'Bearer ' + localStorage.getItem("token") ?? "",

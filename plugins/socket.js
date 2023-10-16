@@ -9,14 +9,14 @@ export default defineNuxtPlugin((nuxtApp) => {
   const echo = new Echo({
     broadcaster: 'pusher',
     key: 'local', // .env
-    wsHost: "127.0.0.1",
+    wsHost: "typingbara-fa53f7433fea.herokuapp.com",
     wsPort: 6001,
     wssPort: 6001,
     forceTLS: false,
     disableStats: true,
     cluster: 'mt1',
     enabledTransports: ['ws', 'wss'],
-    authEndpoint: 'http://local.lo/broadcasting/auth',
+    authEndpoint: 'https://typingbara-fa53f7433fea.herokuapp.com/auth',
     auth:        {
       headers: {
           Authorization: 'Bearer ' + localStorage.getItem("token") ?? "",

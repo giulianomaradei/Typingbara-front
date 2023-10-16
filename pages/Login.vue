@@ -177,7 +177,7 @@
         right: -3px; /* Distância do ícone até a borda direita do botão */
         width: 2rem; /* Largura do ícone */
         height: 2rem; /* Altura do ícone */
-        background-image: url('../assets/images/google-icon.png');
+        background-image: url('/images/google-icon.png');
         background-size: cover;
         background-position: center;
     }

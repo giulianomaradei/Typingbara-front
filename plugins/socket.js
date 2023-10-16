@@ -16,6 +16,13 @@ export default defineNuxtPlugin((nuxtApp) => {
     disableStats: true,
     cluster: 'mt1',
     enabledTransports: ['ws', 'wss'],
+    authEndpoint: 'http://local.lo/broadcasting/auth',
+    auth:        {
+      headers: {
+          Authorization: 'Bearer ' + localStorage.getItem("token") ?? "",
+      },
+  },
+
   })
 
   return {

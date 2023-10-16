@@ -18,7 +18,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       const token = localStorage.getItem("token");
 
       if (token && !config.url.startsWith("/auth") && !config.url.startsWith("https://random-word-api.vercel.app")) {
-        console.log(config.url, token);
         config.headers = config.headers || {}; // Certifique-se de criar o objeto headers se não existir
         config.headers["Authorization"] = `Bearer ${token}`;
       }

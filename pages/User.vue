@@ -60,8 +60,6 @@
         const currentUser = user.value;
         const typing_test_results = currentUser?.typing_test_results;
 
-        console.log(typing_test_results);
-
         return {
             labels: typing_test_results?.map(result => format(new Date(result.created_at), 'dd/MM/yyyy HH:mm:ss')),
             datasets: [

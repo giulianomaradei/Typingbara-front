@@ -6,7 +6,9 @@
             <div v-for="(line, lineId) in displayedLines" :key="lineId">
                 <span v-for="(letter, letterId) in line" :key="letterId">
                     <span v-if="data.letterIndex === data.absoluteLetterIndexes[lineId+data.lineIndex][letterId]"  class="text-line" ></span>
-                    <span :style="{color: data.colors[data.absoluteLetterIndexes[lineId+data.lineIndex][letterId]]}">{{letter}}</span>
+                    <span :style="{color: data.colors[data.absoluteLetterIndexes[lineId+data.lineIndex][letterId]]}">
+                        {{(letter == ' ' && data.colors[data.absoluteLetterIndexes[lineId+data.lineIndex][letterId]] == 'red') ? '_' : letter}}
+                    </span>
                 </span>
             </div>
         </div>
@@ -27,7 +29,8 @@
     const props = defineProps({
         amountOfLines: Number,
         amountOfWords: Number,
-        started:{
+        words: Array as PropType<string[]>,
+        inputable:{
             type: Boolean,
             default: true
         }
@@ -37,7 +40,7 @@
         getRandomText,
     })
 
-    const emit = defineEmits(['correctCharacter', 'wrongCharacter', 'start'])
+    const emit = defineEmits(['correctCharacter', 'wrongCharacter', 'textGenerated', 'typing'])
     
     const data = reactive({
         text: "",
@@ -60,6 +63,10 @@
         }
     }
     
+    watch(() => props.words, async(newInput) =>{
+        getRandomText();
+    })
+
     watch(() => data.hiddenInputValue, async(newInput, oldInput) =>{
         if(oldInput.length > newInput.length){
             keyPressed("Backspace");
@@ -74,9 +81,11 @@
 
     function keyPressed(  key: string ){
         
-        if(!props.started){
+        if(!props.inputable){
             return;
         }
+
+        emit('typing');
 
         const regex = /^[a-zA-Z'.,:?!;()-]$/;
 
@@ -114,6 +123,7 @@
                     data.letterIndex = lastWord.lastWritedIndex;
                     data.words[data.wordIndex].lastWritedIndex =  data.words[data.wordIndex].start;
                     data.wordIndex--;
+                    emit('correctCharacter', -1);
                 }else{
                     data.letterIndex-=1;
                     if(data.colors[data.letterIndex] === "white"){ // if i'm deleting a already correct letter there will be one more letter left
@@ -129,20 +139,20 @@
 
             if(key === 'CapsLock'){
                 data.capslock = data.capslock ? false : true;
-                console.log(data.capslock)
             }
 
             if(key === ' ' && currentWord.start !== data.letterIndex){
+                emit('correctCharacter', 1);
                 data.letterIndex = data.words[data.wordIndex + 1].start
                 data.wordIndex++;
-                emit('correctCharacter', 1);
             }
         }
     }
 
     async function getRandomText() {
-        const response = (await $axios.get(`https://random-word-api.vercel.app/api?words=200`)).data;
-        const cleanedText = response
+        const words = props.words ?? (await $axios.get(`https://random-word-api.vercel.app/api?words=200`)).data;
+
+        const cleanedText = words
             .join(" ")
             .replace(/\n/g, ' ')
             .replace(/[^a-zA-Z ]/g, '')
@@ -151,8 +161,9 @@
             .filter((word: string) => word.length <= 6)
             .slice(0, props.amountOfWords ? props.amountOfWords+1 : 200)
             .join(' ');
-
-        emit('start', cleanedText);
+            
+            
+        emit('textGenerated', cleanedText);
         await setData(cleanedText);
     }
 
@@ -182,6 +193,15 @@
             word = "";
           }
         }
+        newWords.push({
+            start,
+            word,
+            lastWritedIndex: start,
+            index: newWords.length,
+            lettersLeft: length
+        });
+
+
         data.words = newWords;
         data.text = text;
         data.lines = await divideTextInLines();
@@ -218,7 +238,6 @@
         }
 
         if (currentLine) {
-            currentLine+= " ";
             lines.push(currentLine);
             let lineAbsoluteIndexes = [];
             for (let j = 0; j < currentLine.length; j++) {
@@ -287,7 +306,6 @@
         font-size: 1.7rem;
         font-weight: bold;
     }
-
     .capslockWarning{
         color: black;
         background-color: #ffcc00;

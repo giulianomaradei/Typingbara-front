@@ -3,7 +3,7 @@
         <div class="header">
             <div class="logo" @click="$router.push('/')">
                 <div class="title">Typingbara</div>
-                <img class="header-logo" src="~/assets/images/capy_logo.png">
+                <img class="header-logo" src="/images/capy_logo.png">
             </div>
             <div class="options">
                 <div class="button">
@@ -30,7 +30,12 @@
 </template>
 
 <script setup>
+    import { useUserStore } from '~/store/User/UserStore';
+    
     const { $router, $axios } = useNuxtApp();
+    const userStore = useUserStore();
+    const route = useRoute();
+
     function profileHandler(){
         if(localStorage.getItem('token')){
             $router.push('/user');
@@ -40,8 +45,30 @@
     }
 
     async function multiplayerHandler(){
-        const gameId = (await $axios.post('/game')).data.data.game_id;
-        $router.push(`/match/${gameId}`);
+        if(route.path.includes('game')){
+            const gameId = generateString(16);
+            setTimeout(() => {
+                $router.push(`/game/${gameId}`);
+            },200);
+            $router.push("/");
+        }else if(userStore.user.id){
+            const gameId = generateString(16);
+            $router.push(`/game/${gameId}`);
+        }else{
+            $router.push('/login')
+        }
+    }
+
+    
+    function generateString(length) {
+        const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        let result = '';
+        const charactersLength = characters.length;
+        for ( let i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * charactersLength));
+        }
+
+        return result;
     }
 
 

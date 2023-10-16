@@ -1,6 +1,7 @@
 <template>
     <div class="timer-container">
         {{ data.remaining }}
+        <slot></slot>
     </div>
 </template>
 

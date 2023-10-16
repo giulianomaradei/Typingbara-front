@@ -4,12 +4,12 @@
             <Typing 
                 @wronCharacter="handleWrongCharacter" 
                 @correctCharacter="handleCorrectCharacter" 
-                @start="resetResults"
+                @textReceived="resetResults"
                 :amountOfLines="3"
                 ref="typing"
             >
             </Typing>
-            <Timer v-if="data.started" :time="30" :callback="finished"></Timer> 
+            <Timer v-if="data.started" :time="5" :callback="finished"></Timer> 
         </div>
         <div class="button" @click="newTextHandler">
             <div class="tooltip">New Text</div>
@@ -52,6 +52,7 @@
     }
 
     function newTextHandler(){
+        resetResults();
         typing.value?.getRandomText();
     }
 
@@ -67,6 +68,8 @@
             accuracy: data.result.accuracy,
             duration_seconds: data.result.time,
         }
+        resetResults();
+
         if(userStore.user.id){
             $axios.post(`/user/result/${userStore.user.id}`, formatedResult );
         }
@@ -82,6 +85,7 @@
             correctCharacters: 0,
             wrongCharacters: 0,
         }
+        data.started = false;
     }
 
     onMounted(async ()=>{

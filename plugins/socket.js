@@ -22,12 +22,11 @@ export default defineNuxtPlugin((nuxtApp) => {
     disableStats: true,
     cluster: 'mt1',
     authEndpoint: PUSHER_AUTH_URL,
-    auth:        {
+    auth:{
       headers: {
           Authorization: 'Bearer ' + localStorage.getItem("token") ?? "",
       },
-  },
-
+    },
   })
 
   return {

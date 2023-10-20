@@ -1,15 +1,15 @@
 <template>
     <div class="text-frame">
         <div class="typing-wraper">
-            <Typing 
-                @wronCharacter="handleWrongCharacter" 
-                @correctCharacter="handleCorrectCharacter" 
+            <Typing
+                @wronCharacter="handleWrongCharacter"
+                @correctCharacter="handleCorrectCharacter"
                 @textReceived="resetResults"
                 :amountOfLines="3"
                 ref="typing"
             >
             </Typing>
-            <Timer v-if="data.started" :time="5" :callback="finished"></Timer> 
+            <Timer v-if="data.started" :time="30" :callback="finished"></Timer>
         </div>
         <div class="button" @click="newTextHandler">
             <div class="tooltip">New Text</div>
@@ -76,7 +76,7 @@
         $router.push('/result')
     }
 
-        
+
     function resetResults(){
         data.result = {
             wordsPerMinute: 0,

@@ -3,20 +3,25 @@ import Pusher from 'pusher-js';
 
 
 export default defineNuxtPlugin((nuxtApp) => {
+  const runtimeConfig = useRuntimeConfig()
+
+  const PUSHER_KEY = runtimeConfig.public.PUSHER_KEY;
+  const PUSHER_HOST = runtimeConfig.public.PUSHER_HOST;
+  const PUSHER_AUTH_URL = runtimeConfig.public.PUSHER_AUTH_URL;
+
   if (process.client) {
     window.Pusher = Pusher;
   }
   const echo = new Echo({
     broadcaster: 'pusher',
-    key: 'local', // .env
-    wsHost: "typingbara-fa53f7433fea.herokuapp.com",
+    key: PUSHER_KEY, // .env
+    wsHost: PUSHER_HOST,
     wsPort: 6001,
     wssPort: 6001,
-    forceTLS: false,
+    forceTLS: true,
     disableStats: true,
     cluster: 'mt1',
-    enabledTransports: ['ws', 'wss'],
-    authEndpoint: 'https://typingbara-fa53f7433fea.herokuapp.com/broadcasting/auth',
+    authEndpoint: PUSHER_AUTH_URL,
     auth:        {
       headers: {
           Authorization: 'Bearer ' + localStorage.getItem("token") ?? "",

@@ -7,7 +7,11 @@
 </template>
 
 <script setup lang="ts">
-    
+
+    const runtimeConfig = useRuntimeConfig()
+
+
+
     const props = defineProps({
         gameId: {
             type: String,
@@ -17,11 +21,9 @@
 
 
     function copyLinkToClipboard(){
-        const link = `localhost:3000/game/${props.gameId}`;
         navigator.clipboard.writeText(link);
     }
-
-    const link = `localhost:3000/game/${props.gameId}`;
+    const link = runtimeConfig.public.BASE_URL + `/game/${props.gameId}`;
 </script>
 
 <style scoped>

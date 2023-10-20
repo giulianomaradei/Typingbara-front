@@ -20,7 +20,8 @@ export default defineNuxtConfig({
       API_URL: process.env.API_URL,
       PUSHER_KEY: process.env.PUSHER_KEY,
       PUSHER_HOST: process.env.PUSHER_HOST,
-      PUSHER_AUTH_URL : process.env.PUSHER_AUTH_URL
+      PUSHER_AUTH_URL : process.env.PUSHER_AUTH_URL,
+      BASE_URL : process.env.BASE_URL,
     },
   },
 

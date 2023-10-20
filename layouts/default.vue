@@ -22,16 +22,16 @@
             </div>
         </div>
     </div>
-    
+
     <div class="main-container">
         <slot />
     </div>
-    
+
 </template>
 
 <script setup>
     import { useUserStore } from '~/store/User/UserStore';
-    
+
     const { $router, $axios } = useNuxtApp();
     const userStore = useUserStore();
     const route = useRoute();
@@ -51,7 +51,7 @@
                 $router.push(`/game/${gameId}`);
             },200);
             $router.push("/");
-        }else if(userStore.user.id){
+        }else if(localStorage.getItem('token')){
             const gameId = generateString(16);
             $router.push(`/game/${gameId}`);
         }else{
@@ -59,7 +59,7 @@
         }
     }
 
-    
+
     function generateString(length) {
         const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let result = '';

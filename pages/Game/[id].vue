@@ -4,8 +4,8 @@
         <div v-if="data.players.length < 2" class="waiting"> wainting for more players...</div>
         <div class="typing-wraper">
             <div class="countdow"></div>
-            <Typing 
-                @correctCharacter="handleCorrectCharacter" 
+            <Typing
+                @correctCharacter="handleCorrectCharacter"
                 @typing="handleTyping"
                 @textGenerated="handleTextGenerated"
                 :words="data.words"
@@ -24,7 +24,7 @@
                 <div v-if="player.position" class="player-position" :class="getPlayerClass(player.position)">{{ player.position }}° Place </div>
                 <div>{{ player.wordsPerMinute }} wpm</div>
             </div>
-            
+
         </div>
     </div>
     <div v-else class="c-loader"></div>
@@ -37,10 +37,11 @@
     import Timer from '~/components/Typing/Timer.vue';
     import ClipboardLink from '~/components/Multiplayer/ClipboardLink.vue';
     import CapybaraGif from '~/components/Multiplayer/CapybaraGif.vue';
+    import { useUserStore } from '~/store/User/UserStore';
 
-        
     const { $router, $echo, $axios } = useNuxtApp()
     const route = useRoute();
+    const userStore = useUserStore();
 
     const capybaraGifRef = ref<InstanceType<typeof CapybaraGif> | null>(null)
 
@@ -76,7 +77,7 @@
                 }else{
                     data.inputable = false;
                 }
-            }, 3000);
+            }, 1000);
         }
     }
 
@@ -89,7 +90,7 @@
         return (await $axios.get(`https://random-word-api.vercel.app/api?words=200`)).data;
     }
 
-        
+
     function generateString(length: number) {
         const characters ='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
         let result = '';
@@ -128,7 +129,7 @@
             clearInterval(data.sendPlayerTypingIntervalId!);
             data.players[0].position = data.playersFinished + 1;
             data.playersFinished++;
-            
+
             if(data.playersFinished === data.players.length){
                 ($echo.private(`game.${route.params.id}`) as any).whisper('GameFinished', {});
 
@@ -137,7 +138,7 @@
                 },200);
                 $router.push("/");
             }
-            
+
             ($echo.private(`game.${route.params.id}`) as any).whisper('PlayerFinished', {
                 player: data.players[0]
             });
@@ -148,7 +149,7 @@
         const minutesElapsed = (Date.now() - data.players[0].start!) / 60000;
         data.players[0].wordsPerMinute = Math.round((data.correctWords / 5) / minutesElapsed);
     }
-    
+
     function broadcastText(){
         setTimeout(()=>{
             ($echo.private(`game.${route.params.id}`) as any).whisper('TextSent', {text: data.text})
@@ -165,14 +166,17 @@
                 start: 0,
                 position: null
             })
-        }    
-               
+        }
+
         const lastUser = data.players.pop();
         data.players.unshift(lastUser!);
     }
 
     async function handleRedirects(users: any){
-        if(users.length > 4){
+      console.log(localStorage.getItem('token'))
+        if(!localStorage.getItem('token')){
+            $router.push('/');
+        }else if(users.length > 4){
             $router.push('/');
         }else if(users.length >= 2){
             data.timerOn = true;
@@ -224,19 +228,20 @@
             .error((error: any) => {
                 console.error(error);
             });
-            
+
             $echo.private(`game.${route.params.id}`).listenForWhisper('TextSent', (event: TextSent) => {
                 if(data.words.length === 0){
                     data.words = event.text.split(' ');
                     data.text = event.text;
                 }
             });
-            
+
             $echo.private(`game.${route.params.id}`).listenForWhisper('PlayerTyping', (event: PlayerTyping) => {
                 if(event.player.id === data.players[0].id){
                     return;
                 }
                 const player = data.players.find((player: any) => player.id === event.player.id);
+                if(player!.progress < event.player.progress) capybaraGifRef.value[player!.id]?.moveCapybara();
                 player!.progress = event.player.progress;
                 player!.wordsPerMinute = event.player.wordsPerMinute;
             });
@@ -306,7 +311,7 @@
         font-family: RobotMono;
     }
 
-    
+
     .player-info{
         display: flex;
         flex-direction: column;
@@ -326,7 +331,7 @@
     .typing-wraper{
         position: relative;
     }
-    
+
 
     .gold {
         color: gold;
@@ -357,5 +362,5 @@
 
     }
 
-    
+
 </style>

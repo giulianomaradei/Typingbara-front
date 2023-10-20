@@ -28,11 +28,11 @@
        moveCapybara,
     })
 
-    
+
     function getPlayerPadding() {
-        const paddingPercentage = (85 * props.progress) / 100;
+        const paddingPercentage = (70 * props.progress) / 100;
         return {
-            "padding-right": `${85 - paddingPercentage}%`,
+            "padding-right": `${70 - paddingPercentage}%`,
         };
     }
 
@@ -57,11 +57,16 @@
 
 <style scoped>
     .player-capy{
-        height: 100%;
         float: right;
     }
 
+    @media screen and (max-width: 768px) {
+      .player-capy {
+        transform: scale(0.8);
+      }
+    }
+
     .player-capy-container{
-        width: 130%;
+      display: flex;
     }
 </style>

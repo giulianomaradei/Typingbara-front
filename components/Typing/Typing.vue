@@ -24,7 +24,7 @@
 
     const { $axios, $router } = useNuxtApp();
 
-    const inputRef = ref<HTMLInputElement | null>(null); 
+    const inputRef = ref<HTMLInputElement | null>(null);
 
     const props = defineProps({
         amountOfLines: Number,
@@ -41,7 +41,7 @@
     })
 
     const emit = defineEmits(['correctCharacter', 'wrongCharacter', 'textGenerated', 'typing'])
-    
+
     const data = reactive({
         text: "",
         letterIndex: 0,
@@ -56,13 +56,13 @@
         hiddenInputValue: "",
         isMobile: false,
     })
-    
+
     function openMobileKeyboard() {
         if (inputRef.value) {
             inputRef.value.focus();
         }
     }
-    
+
     watch(() => props.words, async(newInput) =>{
         getRandomText();
     })
@@ -80,7 +80,7 @@
     }
 
     function keyPressed(  key: string ){
-        
+
         if(!props.inputable){
             return;
         }
@@ -91,13 +91,13 @@
 
         const currentWord = data.words[data.wordIndex];
         const lastWord = data.words[data.wordIndex-1] ?? null;
-        
+
         if(regex.test(key)){ // if its a normal text letter
             data.capslock = /^[A-Z]$/.test(key)
 
             if(key === data.text![data.letterIndex]){  // if its the right letter
                 data.colors[data.letterIndex] = 'white'
-                data.words[data.wordIndex].lettersLeft--;                                                                                                                                                                                                                       
+                data.words[data.wordIndex].lettersLeft--;
                 emit('correctCharacter', 1);
                 if(props.amountOfLines && data.letterIndex === data.absoluteLetterIndexes[data.lineIndex+1][data.absoluteLetterIndexes[data.lineIndex+1].length-2]){ // if the letter is the last from the second line (-2 because there is always a empty space in the end)
                     data.lineIndex++;
@@ -112,13 +112,13 @@
             if(key === "Backspace"){
 
                 if(data.letterIndex <= 0 ){ //start of the text cannot go back
-                    return;   
+                    return;
                 }
 
                 if(data.wordIndex-1 >=0 && data.letterIndex === currentWord.start && lastWord.lettersLeft === 0){ // If we are at the beginning of the word and are trying to do a backspace, which would make us go back to the last word, so we gotta check if it wasn't already complete.
                     return;
                 }
-                
+
                 if (currentWord.start > data.letterIndex - 1){ // if we are in the start of a word and do a backspace we need to go to the last writed letter in the previous word
                     data.letterIndex = lastWord.lastWritedIndex;
                     data.words[data.wordIndex].lastWritedIndex =  data.words[data.wordIndex].start;
@@ -161,8 +161,8 @@
             .filter((word: string) => word.length <= 6)
             .slice(0, props.amountOfWords ? props.amountOfWords+1 : 200)
             .join(' ');
-            
-            
+
+
         emit('textGenerated', cleanedText);
         await setData(cleanedText);
     }
@@ -209,7 +209,7 @@
     }
 
     async function divideTextInLines() {
-        
+
         let lines: string[] = [];
         let currentLine = "";
         let cumulativeCharacters= 0;
@@ -226,7 +226,7 @@
             } else {
                 currentLine+= " ";
                 lines.push(currentLine);
-                
+
                 let lineAbsoluteIndexes = [];
                 for (let j = 0; j < currentLine.length; j++) {
                     lineAbsoluteIndexes.push(cumulativeCharacters + j);
@@ -253,17 +253,17 @@
         await document.fonts.ready;
         const canvas = document.createElement('canvas');
         const context = canvas.getContext('2d');
-        
+
         if (!context) {
             return Infinity;
         }
-        
+
         context.font = '1.7rem RobotMono'; // Adjust the font size and style as needed
         const width = context.measureText(text).width;
-        
+
         return width;
     }
- 
+
     const displayedLines = computed(()=>{
         if(props.amountOfLines){
             return data.lines.slice(data.lineIndex, data.lineIndex+props.amountOfLines);
@@ -292,7 +292,7 @@
 <style lang="scss" scoped>
     #text-container{
         width: 100%;
-        font-size: 1.7rem;
+        font-size: clamp(1.3rem, 1.2259rem + 0.3951vw, 1.7rem);
         font-family: 'RobotMono';
         @media screen and (max-width: 768px) {
             display: flex;

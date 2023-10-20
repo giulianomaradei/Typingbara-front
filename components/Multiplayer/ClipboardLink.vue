@@ -34,12 +34,12 @@
         border-radius: 0.5rem;
         border: 1px solid gold;
         margin: 10px;
-
+        font-size: clamp(0.5rem, 0.4074rem + 0.4938vw, 1rem);
 
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 1rem;
+        gap: clamp(0.3rem, 0.1519rem + 0.7901vw, 1.1rem);;
     }
 
     .link:hover{

@@ -22,7 +22,7 @@
             </div>
             <div class="player-info">
                 <div v-if="player.position" class="player-position" :class="getPlayerClass(player.position)">{{ player.position }}° Place </div>
-                <div>{{ player.wordsPerMinute }} wpm</div>
+                <div class="player-wpm">{{ player.wordsPerMinute }} wpm</div>
             </div>
 
         </div>
@@ -284,9 +284,9 @@
         flex-direction: row;
         flex-wrap: wrap;
         position: relative;
-        width: 100%;
         margin: 1rem 0;
-        width: 45rem;
+        width: 50rem;
+        max-width: 90vw;
     }
 
     .capy-container{
@@ -306,8 +306,7 @@
         font-weight: bold;
         flex-wrap: wrap;
         padding: 0.3rem;
-        padding-right: 3rem;
-        font-size: 1.1rem;
+        font-size: clamp(0.6rem, 0.5074rem + 0.4938vw, 1.1rem);
         font-family: RobotMono;
     }
 
@@ -322,6 +321,10 @@
         padding: 0.3rem;
         flex: 1;
         font-family: RobotMono;
+    }
+
+    .player-wpm{
+      font-size: clamp(0.7rem, 0.6444rem + 0.2963vw, 1rem);
     }
 
     .player-position{
@@ -347,6 +350,7 @@
 
     .waiting{
         animation: blink 2s linear infinite;
+        font-size: clamp(0.7rem, 0.6444rem + 0.2963vw, 1rem);
     }
 
     @keyframes blink {

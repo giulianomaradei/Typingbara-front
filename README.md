@@ -1,64 +1,16 @@
-# Nuxt 3 Minimal Starter
+# Typingbara
+<img src="https://raw.githubusercontent.com/giulianomaradei/Typingbara-front/abb1e3c7f3a755e7cfe369cfe8c1d55fabb5f13f/public/images/capy_logo.png" alt="Capy Logo" width="200">
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Typingbara is a typing website built using Nuxt.js and Laravel on the backend. The website is designed for individuals to test how quickly they can type, receiving feedback on their typing speed and accuracy.
 
-## Setup
+## Features
 
-Make sure to install the dependencies:
+- **User Authentication:** Secure user authentication system to manage user accounts and track progress.
 
-```bash
-# npm
-npm install
+- **Detailed Analytics:** Track and visualize your typing performance over time, including typing speed and accuracy statistics.
 
-# pnpm
-pnpm install
+- **Leaderboard:** Compete with other users and see how you rank on the global leaderboard.
 
-# yarn
-yarn install
-```
+- **Multiplayer Mode:** Create typing rooms and invite friends for real-time typing speed challenges.
 
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
-# capyType-front
+- **Live Tracking:** Real-time tracking of typing speed and characters typed facilitated by WebSockets.

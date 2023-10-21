@@ -3,7 +3,6 @@
 
         <div class="user-container card">
             <template v-if="user.id">
-                <img class="round-image" src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png">
                 <div class="username">{{user?.name}}</div>
                 <div @click="logout" class="button">
                     <div class="tooltip">Logout</div>
@@ -38,11 +37,11 @@
     import Chart from '../components/Profile/Chart.vue'
 
     const { $axios, $router } = useNuxtApp();
-    
+
     const userStore = useUserStore();
-    
+
     const showPassword = ref(false);
-    
+
     const togglePasswordVisibility = () => {
         showPassword.value = !showPassword.value;
     };
@@ -52,7 +51,7 @@
     })
 
     const logout = () => {
-        localStorage.removeItem('token'); 
+        localStorage.removeItem('token');
         userStore.user.id = null;
         $router.push('/');
     };
@@ -78,7 +77,7 @@
         };
     });
 
-        
+
     const chartOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -121,7 +120,7 @@
                     size: 17,
                     family: 'RobotMono'
                 }
-                
+
             },
             legend: {
                 display: false // Oculta a exibição da legenda
@@ -217,5 +216,5 @@
         width: 100%;
         height: 30vh;
     }
-    
+
 </style>

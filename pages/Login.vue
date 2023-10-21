@@ -17,12 +17,12 @@
 
                 <input v-if="data.view === 'Register'" v-model="data.password" :type="'password'" placeholder="Password">
                 <input v-if="data.view === 'Register'" v-model="data.confirmPassword" :type="'password'" placeholder="Confirm Password">
-                
+
                 <div v-if="data.error" class="error">{{ data.error }}</div>
 
                 <div class="buttons">
                     <button @click.prevent="loginHandler" v-if="data.view === 'Login'" class="submit-btn">Login</button>
-                    <button v-if="data.view === 'Login'" class="google-button submit-btn">Login with Google<span class="google-icon"></span></button>
+                    <!--<button v-if="data.view === 'Login'" class="google-button submit-btn">Login with Google<span class="google-icon"></span></button>-->
                     <button @click.prevent="registerHandler" v-if="data.view === 'Register'" class="submit-btn">Register</button>
                 </div>
                 <div @click="changeView" class="changeViewButton">Don't have a account?</div>
@@ -36,7 +36,7 @@
     import { ref } from 'vue';
     import { useUserStore } from '~/store/User/UserStore';
     const { $router, $axios } = useNuxtApp();
-    
+
     const userStore = useUserStore();
     const showPassword = ref(false);
 
@@ -69,19 +69,19 @@
                 email: data.email,
                 password: data.password
             })).data;
-            
+
             if(response.token){
                 localStorage.setItem('token', response.token);
-                
+
                 const user = (await $axios.get('/user')).data.data;
                 userStore.user = user;
-                
+
                 $router.push('/user');
             }
         } catch (err: any) {
             setErrorText(err.response.data.message);
         }
-        
+
     }
 
     async function registerHandler() {
@@ -95,10 +95,10 @@
 
             if(response.token){
                 localStorage.setItem('token', response.token);
-                
+
                 const user = (await $axios.get('/user')).data.data;
                 userStore.user = user;
-                
+
                 $router.push('/user');
             }
         } catch (err: any) {
@@ -109,7 +109,7 @@
     const togglePasswordVisibility = () => {
         showPassword.value = !showPassword.value;
     };
-    
+
 </script>
 
 <style lang="scss" scoped>

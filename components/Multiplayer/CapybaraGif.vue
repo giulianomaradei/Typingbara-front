@@ -57,6 +57,7 @@
 
 <style scoped>
     .player-capy{
+      height: 100%;
         float: right;
     }
 
@@ -67,6 +68,7 @@
     }
 
     .player-capy-container{
-      display: flex;
+      width: 100%;
+
     }
 </style>

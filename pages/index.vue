@@ -92,6 +92,7 @@
         if(localStorage.getItem('token')){
             userStore.user = (await $axios.get('/user')).data.data;
         }
+        await $axios.get("/wake_up");
         window.addEventListener("keydown", ()=>{data.started = true} );
     })
 </script>

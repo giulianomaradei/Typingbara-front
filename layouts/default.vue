@@ -7,7 +7,7 @@
             </div>
             <div class="options">
                 <div class="button">
-                    <div class="tooltip">Mystery</div>
+                    <div class="tooltip">Multiplayer</div>
                     <font-awesome-icon class="iconButton multiplayer-icon"  @click="multiplayerHandler" :icon="['fas', 'gamepad']" />
                 </div>
                 <div class="button">

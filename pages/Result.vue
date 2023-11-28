@@ -2,7 +2,7 @@
     <div class="result-container">
         <div class="result">
             <div>WPM: {{ result.wordsPerMinute }}</div>
-            <div>Accuaracy: {{ result.accuracy }}%</div>
+            <div>Accuracy: {{ result.accuracy }}%</div>
             <div>Correct/Wrong: {{ `${result.correctCharacters}/${result.wrongCharacters}`  }}</div>
         </div>
         <div>
@@ -16,10 +16,9 @@
 
 <script setup>
     import { computed, reactive, onMounted } from 'vue';
-    import { useTypingStore } from '~/store/Typing/TypingStore'; 
+    import { useTypingStore } from '~/store/Typing/TypingStore';
 
     const store = useTypingStore();
-    const route = useRoute()
     const { $router } = useNuxtApp();
 
     const result = computed(()=>{
@@ -45,7 +44,7 @@
 
     span{
         font-size: 4rem;
-    }    
+    }
     .result-actions{
         display: flex;
     }

@@ -25,7 +25,7 @@
                     <!--<button v-if="data.view === 'Login'" class="google-button submit-btn">Login with Google<span class="google-icon"></span></button>-->
                     <button @click.prevent="registerHandler" v-if="data.view === 'Register'" class="submit-btn">Register</button>
                 </div>
-                <div @click="changeView" class="changeViewButton">Don't have a account?</div>
+                <div @click="changeView" class="changeViewButton">{{ (data.view === 'Login') ? "Don't have an account?" : "Already have an account"}}</div>
             </form>
         </div>
     </div>

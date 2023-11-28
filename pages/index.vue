@@ -2,7 +2,7 @@
     <div class="text-frame">
         <div class="typing-wraper">
             <Typing
-                @wronCharacter="handleWrongCharacter"
+                @wrongCharacter="handleWrongCharacter"
                 @correctCharacter="handleCorrectCharacter"
                 @textReceived="resetResults"
                 :amountOfLines="3"
@@ -48,6 +48,7 @@
     }
 
     function handleWrongCharacter(amount : number){
+      console.log("Oie");
         data.result.wrongCharacters += amount;
     }
 
